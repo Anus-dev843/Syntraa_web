@@ -1,0 +1,39 @@
+{
+  "categories": [
+    {
+      "slug": "shampoo",
+      "title": "Shampoo",
+      "subtitle": "Cleanse with intention",
+      "description": "Silk-like lather that respects scalp balance and luminous shine.",
+      "image": "https://images.unsplash.com/photo-1556228720-1920217b7442?q=80&w=900&auto=format&fit=crop"
+    },
+    {
+      "slug": "facewash",
+      "title": "Facewash",
+      "subtitle": "Daily clarity ritual",
+      "description": "Gentle, low-foam formulas engineered for radiant, calm skin.",
+      "image": "https://images.unsplash.com/photo-1570172617284-dd931b1dad47?q=80&w=900&auto=format&fit=crop"
+    },
+    {
+      "slug": "serums",
+      "title": "Serums",
+      "subtitle": "Concentrated performance",
+      "description": "Layerable actives in weightless textures for visibly refined clarity.",
+      "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=900&auto=format&fit=crop"
+    },
+    {
+      "slug": "bodycare",
+      "title": "Bodycare",
+      "subtitle": "Skin from shoulder to heel",
+      "description": "Oils and creams that melt into the body with satin finish.",
+      "image": "https://images.unsplash.com/photo-1608248597279-f99d060bfcce?q=80&w=900&auto=format&fit=crop"
+    },
+    {
+      "slug": "haircare",
+      "title": "Haircare",
+      "subtitle": "Sculpt & protect",
+      "description": "Oils and treatments that tame, shield, and capture light.",
+      "image": "https://images.unsplash.com/photo-1526947425960-b4dcf4fba213?q=80&w=900&auto=format&fit=crop"
+    }
+  ]
+}

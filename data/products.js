@@ -1,0 +1,231 @@
+/**
+ * Central product catalog for The Syntraa.
+ * Seeded into admin-store on first run; reset via admin API reloads this list.
+ * @type {import('../src/lib/types').Product[]}
+ */
+export const PRODUCTS = [
+  {
+    id: "prod-nova-shampoo",
+    name: "Nova Silk Shampoo",
+    slug: "nova-silk-shampoo",
+    category: "shampoo",
+    price: 52,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1556228720-1920217b7442?q=80&w=1200&auto=format&fit=crop",
+    featured: true,
+    shortDescription: "Weightless hydration with cold-pressed botanicals.",
+    description:
+      "Nova Silk is formulated for hair that reads luminous under any light. A silk amino matrix cushions the cuticle while botanical lipids rinse clean—no film, no drag. Use as the opening gesture of your wash ritual; follow with Aurora conditioner when lengths crave structure.",
+    ingredients: [
+      "Hydrolyzed silk protein",
+      "Cold-pressed camellia oleifera seed oil",
+      "Sodium cocoyl isethionate (mild surfactant)",
+      "Panthenol (pro-vitamin B5)",
+      "Glycerin",
+      "Fragrance (botanical accord, IFRA-compliant)",
+    ],
+    rating: 4.8,
+  },
+  {
+    id: "prod-midnight-facewash",
+    name: "Midnight Ritual Cleanser",
+    slug: "midnight-ritual-cleanser",
+    category: "facewash",
+    price: 42,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=1200&auto=format&fit=crop",
+    featured: true,
+    shortDescription: "Cream foam that melts away impurities without stripping.",
+    description:
+      "A dense cream foam that lifts SPF, particulate, and excess sebum while respecting barrier lipids. Skin exits the rinse calm—not squeaky—with a faint trace of clarity that primes serums beautifully.",
+    ingredients: [
+      "Glycerin",
+      "Caprylic/capric triglyceride",
+      "Disodium cocoamphodiacetate",
+      "Niacinamide",
+      "Allantoin",
+      "Ceramide NP (trace)",
+    ],
+    rating: 4.6,
+  },
+  {
+    id: "prod-halo-serum",
+    name: "Halo Luminescence Serum",
+    slug: "halo-luminescence-serum",
+    category: "serums",
+    price: 128,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop",
+    featured: true,
+    shortDescription: "Dual-phase peptides for visibly even tone overnight.",
+    description:
+      "Halo pairs a water-light first touch with a slow-release peptide phase designed for overnight rhythm. Morning skin reads more even in tone and smoother in texture—never tight, never glittery.",
+    ingredients: [
+      "Water (aqua)",
+      "Niacinamide",
+      "Acetyl hexapeptide-8",
+      "Sodium hyaluronate crosspolymer",
+      "Licorice root extract",
+      "Squalane",
+    ],
+    rating: 4.9,
+  },
+  {
+    id: "prod-ember-body",
+    name: "Ember Satin Body Oil",
+    slug: "ember-satin-body-oil",
+    category: "bodycare",
+    price: 78,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1608248597279-f99d060bfcce?q=80&w=1200&auto=format&fit=crop",
+    featured: true,
+    shortDescription: "Dry-touch oil veil with jasmine and steamed vanilla.",
+    description:
+      "A dry-touch body oil that sheens then settles into skin within minutes. Ember was composed for evenings when you want warmth without cling—silk robe, low light, and skin that still feels breathable.",
+    ingredients: [
+      "Caprylic/capric triglyceride",
+      "Squalane",
+      "Jasminum grandiflorum flower extract",
+      "Tocopherol",
+      "Helianthus annuus (sunflower) seed oil",
+    ],
+    rating: 4.7,
+  },
+  {
+    id: "prod-lumen-hair-oil",
+    name: "Lumen Gloss Hair Oil",
+    slug: "lumen-gloss-hair-oil",
+    category: "haircare",
+    price: 64,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1526947425960-b4dcf4fba213?q=80&w=1200&auto=format&fit=crop",
+    featured: true,
+    shortDescription: "Featherlight finish heat-shield complex.",
+    description:
+      "Lumen is the finishing oil for blowouts that need glide without weight. A featherlight ester base disperses heat stress while reflecting clean shine along the surface of the cuticle.",
+    ingredients: [
+      "Cyclopentasiloxane",
+      "Dimethiconol",
+      "Argania spinosa kernel oil",
+      "Camellia japonica seed oil",
+      "Fragrance",
+    ],
+    rating: 4.8,
+  },
+  {
+    id: "prod-aurora-conditioner",
+    name: "Aurora Restorative Conditioner",
+    slug: "aurora-restorative-conditioner",
+    category: "haircare",
+    price: 54,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1503951914875-452162fa0ebb?q=80&w=1200&auto=format&fit=crop",
+    featured: false,
+    shortDescription: "Rebuilds brittle lengths with peptide ceramides.",
+    description:
+      "Aurora deposits a peptide-ceramide slip that detangles aggressively damaged lengths without flattening root volume. Rinse until water runs clear; hair should feel supple, not coated.",
+    ingredients: [
+      "Behentrimonium chloride",
+      "Cetyl alcohol",
+      "Hydrolyzed vegetable protein",
+      "Ceramide NG",
+      "Shea butter ethyl esters",
+    ],
+    rating: 4.5,
+  },
+  {
+    id: "prod-pure-shampoo",
+    name: "Pure Canvas Shampoo",
+    slug: "pure-canvas-shampoo",
+    category: "shampoo",
+    price: 48,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1571875257727-136c99714d12?q=80&w=1200&auto=format&fit=crop",
+    featured: false,
+    shortDescription: "Daily reset for oily roots without harsh surfactants.",
+    description:
+      "Pure Canvas targets oily roots with a balanced surfactant chassis that never veers into squeak. Ideal for daily washers who still demand slip and a quiet, monochrome finish.",
+    ingredients: [
+      "Lauryl glucoside",
+      "Cocamidopropyl betaine",
+      "Zinc PCA",
+      "Mentha piperita water",
+      "Panthenol",
+    ],
+    rating: 4.4,
+  },
+  {
+    id: "prod-ion-facewash",
+    name: "Ion Matte Balance Wash",
+    slug: "ion-matte-balance-wash",
+    category: "facewash",
+    price: 38,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1570172617284-dd931b1dad47?q=80&w=1200&auto=format&fit=crop",
+    featured: false,
+    shortDescription: "Clay micro-spheres diffuse shine for hours.",
+    description:
+      "Ion suspends micro-fine mineral spheres in a gel-cream base to diffuse shine through the day without desiccating the barrier. Best for combination skin that trends oily at midday.",
+    ingredients: [
+      "Kaolin",
+      "Glycerin",
+      "Salicylic acid (0.5%)",
+      "Zinc oxide (cosmetic grade)",
+      "Niacinamide",
+    ],
+    rating: 4.3,
+  },
+  {
+    id: "prod-lattice-serum",
+    name: "Lattice Hydration Drops",
+    slug: "lattice-hydration-drops",
+    category: "serums",
+    price: 96,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1608571423902-eed4ef5ff5e1?q=80&w=1200&auto=format&fit=crop",
+    featured: false,
+    shortDescription: "4D hyaluronic stack for supple bounce.",
+    description:
+      "Lattice stacks four molecular weights of hyaluronic support with a humectant lattice that holds water through air travel and climate shifts. Layer under cream in winter; alone in humid seasons.",
+    ingredients: [
+      "Water",
+      "Sodium hyaluronate",
+      "Hydrolyzed hyaluronic acid",
+      "Panthenol",
+      "Beta-glucan",
+      "Pentylene glycol",
+    ],
+    rating: 4.6,
+  },
+  {
+    id: "prod-salt-body",
+    name: "Salt Stone Body Polish",
+    slug: "salt-stone-body-polish",
+    category: "bodycare",
+    price: 58,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1616394584738-fc96e7921125?q=80&w=1200&auto=format&fit=crop",
+    featured: false,
+    shortDescription: "Mineral resurfacing balm with cooling finish.",
+    description:
+      "Salt Stone is a balm polish that warms on contact then rinses to a cooling mineral finish. Use weekly on dry skin before oils; elbows and shoulders especially love the ritual.",
+    ingredients: [
+      "Sea salt (maris sal)",
+      "Caprylic/capric triglyceride",
+      "Bamboo powder",
+      "Menthol (cooling)",
+      "Shea butter",
+    ],
+    rating: 4.5,
+  },
+];

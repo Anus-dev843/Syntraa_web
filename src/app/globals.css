@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+:root {
+  --background: #000000;
+  --foreground: #f5f5f5;
+  --luxury-muted: #9a9a9a;
+  --luxury-line: rgba(245, 245, 245, 0.1);
+  --gutter-x: clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(3.5rem, 9vw, 5.5rem);
+  --section-y-lg: clamp(4.75rem, 11vw, 7.5rem);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-luxury-black: #000000;
+  --color-luxury-snow: #f5f5f5;
+  --color-luxury-charcoal: #141414;
+  --color-luxury-muted: var(--luxury-muted);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+  --tracking-display: 0.02em;
+  --leading-body: 1.65;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.01em;
+  line-height: var(--leading-body);
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.font-display {
+  letter-spacing: var(--tracking-display, 0.02em);
+}
+
+::selection {
+  background-color: rgba(245, 245, 245, 0.18);
+  color: var(--foreground);
+}
+
+/* Micro press on primary pills (opt-in via class) */
+.pressable:active {
+  transform: scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pressable:active {
+    transform: none;
+  }
+}
