@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 
 const fadeEase = [0.22, 1, 0.36, 1] as const;
-const heroLines = ["The Syntraa", "Design That Feels"] as const;
+const heroLines = ["THE SYNTAA"] as const;
 
 const containerVariants = {
   hidden: {},
@@ -99,10 +99,10 @@ export function Hero() {
         {reduceMotion ? (
           <div className="w-full space-y-7 sm:space-y-8">
             <h1 className="font-display text-4xl font-medium leading-[1.08] tracking-[0.01em] text-white sm:text-5xl md:text-7xl lg:text-8xl">
-              The Syntraa
+              THE SYNTAA
             </h1>
             <p className="mx-auto max-w-[30ch] text-base font-light tracking-[0.16em] text-white/85 sm:text-lg sm:tracking-[0.2em] md:text-xl md:tracking-[0.28em]">
-              Luxury in Every Layer
+              LUXURY IN EVERY LAYER
             </p>
             <Link
               href="/products"
@@ -134,7 +134,7 @@ export function Hero() {
               variants={itemVariants}
               className="max-w-[30ch] text-sm font-light leading-relaxed tracking-[0.14em] text-white/88 sm:max-w-xl sm:text-base sm:tracking-[0.2em] md:text-lg md:tracking-[0.28em]"
             >
-              Every interaction is crafted to breathe, glide, and stay remembered.
+              LUXURY IN EVERY LAYER
             </motion.p>
 
             <motion.div variants={itemVariants} className="w-full sm:w-auto">
