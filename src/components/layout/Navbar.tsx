@@ -15,12 +15,12 @@ const navCategories = CATEGORY_SLUGS.map((slug) => ({
 }));
 
 const navLink = cn(
-  "relative text-[11px] uppercase tracking-[0.28em] text-luxury-muted transition-colors duration-300 hover:text-luxury-snow",
+  "relative whitespace-nowrap text-[11px] uppercase tracking-[0.18em] text-luxury-muted transition-colors duration-300 hover:text-luxury-snow",
   "after:pointer-events-none after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-luxury-snow/70 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100",
 );
 
 const navButton =
-  "text-[11px] uppercase tracking-[0.28em] text-luxury-muted transition-colors duration-300 hover:text-luxury-snow";
+  "whitespace-nowrap text-[11px] uppercase tracking-[0.18em] text-luxury-muted transition-colors duration-300 hover:text-luxury-snow";
 
 function CartNavButton() {
   const { itemCount, openCart, hydrated } = useCart();
@@ -76,14 +76,25 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
-  const desktopNav = (
-    <nav
-      aria-label="Primary"
-      className="items-center gap-8 xl:gap-10"
-    >
+  const leftDesktopNav = (
+    <nav aria-label="Primary left" className="hidden items-center gap-6 lg:flex">
       <Link href="/" className={navLink}>
         Home
       </Link>
+      <Link href="/story" className={navLink}>
+        Story
+      </Link>
+      <Link
+        href="/contact"
+        className="rounded-full border border-white/15 px-5 py-2 text-[10px] uppercase tracking-[0.24em] text-luxury-snow transition hover:border-white/35 hover:bg-white/[0.06]"
+      >
+        Let&apos;s talk
+      </Link>
+    </nav>
+  );
+
+  const rightDesktopNav = (
+    <nav aria-label="Primary right" className="hidden items-center gap-6 lg:flex">
       <Link href="/products" className={navLink}>
         Products
       </Link>
@@ -114,17 +125,8 @@ export function Navbar() {
           </ul>
         </div>
       </div>
-      <Link href="/story" className={navLink}>
-        Story
-      </Link>
       <Link href="/contact" className={navLink}>
         Contact
-      </Link>
-      <Link
-        href="/contact"
-        className="rounded-full border border-white/15 px-5 py-2 text-[10px] uppercase tracking-[0.3em] text-luxury-snow transition hover:border-white/35 hover:bg-white/[0.06]"
-      >
-        Let&apos;s talk
       </Link>
     </nav>
   );
@@ -142,12 +144,19 @@ export function Navbar() {
         <div
           className={cn(
             "relative mx-auto flex max-w-6xl items-center justify-between gap-6 px-[var(--gutter-x)] transition-[padding] duration-500",
-            scrolled ? "py-3.5 md:py-4" : "py-4 md:py-5",
+            scrolled ? "py-2.5 md:py-3" : "py-3 md:py-3.5",
           )}
         >
-          <div className="relative z-10 w-[5.5rem] lg:hidden" aria-hidden />
-          <div className="relative z-10 hidden lg:flex lg:flex-1">
-            {desktopNav}
+          <div className="relative z-10 flex w-[5.5rem] items-center lg:hidden">
+            <Link
+              href="/story"
+              className="text-[10px] uppercase tracking-[0.22em] text-luxury-muted transition hover:text-luxury-snow"
+            >
+              Story
+            </Link>
+          </div>
+          <div className="relative z-10 hidden lg:flex lg:flex-1 lg:items-center">
+            {leftDesktopNav}
           </div>
 
           <Link
@@ -169,7 +178,11 @@ export function Navbar() {
             The Syntraa
           </Link>
 
-          <div className="relative z-10 ml-auto flex items-center justify-end gap-2 lg:min-w-[6.5rem]">
+          <div className="relative z-10 hidden lg:flex lg:flex-1 lg:items-center lg:justify-end">
+            {rightDesktopNav}
+          </div>
+
+          <div className="relative z-10 ml-auto flex items-center justify-end gap-2 lg:hidden">
             <CartNavButton />
             <button
               type="button"
