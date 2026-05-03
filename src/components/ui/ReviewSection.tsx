@@ -26,10 +26,14 @@ export function ReviewSection({
   return (
     <section
       className={cn(
-        "border-y border-white/10 bg-black py-[var(--section-y)] md:py-[var(--section-y-lg)]",
+        "relative overflow-hidden border-y border-white/10 bg-black py-[var(--section-y)] md:py-[var(--section-y-lg)]",
         className,
       )}
     >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(ellipse_65%_100%_at_50%_0%,rgba(245,245,245,0.08),transparent_72%)]"
+        aria-hidden
+      />
       <div className="mx-auto max-w-6xl px-[var(--gutter-x)]">
         <AnimatedSection className="max-w-2xl">
           <p className="text-[0.65rem] uppercase tracking-[0.36em] text-luxury-muted">
@@ -45,14 +49,18 @@ export function ReviewSection({
 
         <MotionStagger
           variant="testimonial"
-          className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-9"
+          className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-9"
         >
           {sorted.map((r) => (
             <motion.div
               key={r.id}
               variants={staggerItem}
-              className="group flex h-full flex-col rounded-2xl border border-white/[0.09] bg-luxury-charcoal/50 p-6 transition-[border-color,box-shadow] duration-500 hover:border-white/16 hover:shadow-[0_24px_56px_-40px_rgba(0,0,0,0.85)] md:p-7"
+              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-gradient-to-b from-white/[0.03] via-luxury-charcoal/60 to-luxury-charcoal/45 p-6 transition-[border-color,box-shadow,transform] duration-500 md:p-7 md:hover:-translate-y-1 md:hover:border-white/16 md:hover:shadow-[0_24px_56px_-40px_rgba(0,0,0,0.85)]"
             >
+              <span
+                className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.08),transparent_78%)] opacity-0 transition-opacity duration-400 md:group-hover:opacity-100"
+                aria-hidden
+              />
               <StarRating
                 average={r.rating}
                 size="sm"
@@ -65,9 +73,14 @@ export function ReviewSection({
               <p className="mt-4 flex-1 text-sm leading-relaxed text-luxury-muted">
                 “{r.body}”
               </p>
-              <div className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-4 text-[11px] uppercase tracking-[0.26em] text-luxury-muted">
+              <div className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-4 text-[10px] uppercase tracking-[0.24em] text-luxury-muted md:text-[11px] md:tracking-[0.26em]">
                 <span>{r.author}</span>
-                <time dateTime={r.date}>{r.date}</time>
+                <time
+                  dateTime={r.date}
+                  className="rounded-full border border-white/12 px-2.5 py-1 text-[9px] tracking-[0.22em] md:text-[10px]"
+                >
+                  {r.date}
+                </time>
               </div>
             </motion.div>
           ))}

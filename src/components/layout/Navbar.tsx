@@ -79,7 +79,7 @@ export function Navbar() {
   const desktopNav = (
     <nav
       aria-label="Primary"
-      className="hidden items-center justify-center gap-10 lg:flex"
+      className="items-center gap-8 xl:gap-10"
     >
       <Link href="/" className={navLink}>
         Home
@@ -120,6 +120,12 @@ export function Navbar() {
       <Link href="/contact" className={navLink}>
         Contact
       </Link>
+      <Link
+        href="/contact"
+        className="rounded-full border border-white/15 px-5 py-2 text-[10px] uppercase tracking-[0.3em] text-luxury-snow transition hover:border-white/35 hover:bg-white/[0.06]"
+      >
+        Let&apos;s talk
+      </Link>
     </nav>
   );
 
@@ -133,19 +139,37 @@ export function Navbar() {
             "border-white/[0.11] bg-black/30 supports-[backdrop-filter]:bg-black/[0.42]",
         )}
       >
-        <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-6 px-[var(--gutter-x)] py-4 md:py-5">
-          <Link
-            href="/"
-            className="relative z-10 font-display text-xl tracking-[0.14em] text-luxury-snow md:text-2xl"
-          >
-            The Syntraa
-          </Link>
-
-          <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block">
+        <div
+          className={cn(
+            "relative mx-auto flex max-w-6xl items-center justify-between gap-6 px-[var(--gutter-x)] transition-[padding] duration-500",
+            scrolled ? "py-3.5 md:py-4" : "py-4 md:py-5",
+          )}
+        >
+          <div className="relative z-10 w-[5.5rem] lg:hidden" aria-hidden />
+          <div className="relative z-10 hidden lg:flex lg:flex-1">
             {desktopNav}
           </div>
 
-          <div className="relative z-10 flex items-center justify-end gap-2 lg:min-w-[6.5rem]">
+          <Link
+            href="/"
+            className={cn(
+              "absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 font-display tracking-[0.14em] text-luxury-snow transition-[font-size,letter-spacing] duration-500",
+              scrolled
+                ? "text-[1.05rem] md:text-[1.35rem]"
+                : "text-xl md:text-2xl",
+            )}
+          >
+            <span
+              className={cn(
+                "pointer-events-none absolute inset-x-[-18%] top-1/2 -z-10 h-7 -translate-y-1/2 rounded-full bg-white/16 blur-xl transition-opacity duration-500",
+                scrolled ? "opacity-45" : "opacity-70",
+              )}
+              aria-hidden
+            />
+            The Syntraa
+          </Link>
+
+          <div className="relative z-10 ml-auto flex items-center justify-end gap-2 lg:min-w-[6.5rem]">
             <CartNavButton />
             <button
               type="button"

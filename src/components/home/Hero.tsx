@@ -2,9 +2,16 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 const fadeEase = [0.22, 1, 0.36, 1] as const;
+const heroLines = ["The Syntraa", "Design That Feels"] as const;
 
 const containerVariants = {
   hidden: {},
@@ -24,6 +31,15 @@ const itemVariants = {
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+
+  const smoothX = useSpring(pointerX, { stiffness: 110, damping: 22, mass: 0.55 });
+  const smoothY = useSpring(pointerY, { stiffness: 110, damping: 22, mass: 0.55 });
+  const glowX = useTransform(smoothX, [-1, 1], [-22, 22]);
+  const glowY = useTransform(smoothY, [-1, 1], [-18, 18]);
+  const inverseGlowX = useTransform(glowX, (value) => value * -0.65);
+  const inverseGlowY = useTransform(glowY, (value) => value * -0.65);
 
   function scrollToStory() {
     document.getElementById("collections")?.scrollIntoView({
@@ -32,14 +48,46 @@ export function Hero() {
     });
   }
 
+  function onHeroPointerMove(event: React.PointerEvent<HTMLElement>) {
+    if (reduceMotion) return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width;
+    const y = (event.clientY - bounds.top) / bounds.height;
+    pointerX.set((x - 0.5) * 2);
+    pointerY.set((y - 0.5) * 2);
+  }
+
+  function onHeroPointerLeave() {
+    pointerX.set(0);
+    pointerY.set(0);
+  }
+
   return (
     <section
       className="relative flex min-h-[calc(100svh-5.25rem)] flex-col items-center justify-center overflow-hidden border-b border-white/10 bg-black px-4 sm:px-6 md:min-h-[calc(100svh-4.25rem)]"
       aria-label="Hero"
+      onPointerMove={onHeroPointerMove}
+      onPointerLeave={onHeroPointerLeave}
     >
+      {!reduceMotion ? (
+        <>
+          <motion.div
+            className="pointer-events-none absolute left-[-14%] top-[8%] h-44 w-44 rounded-full bg-white/12 blur-3xl sm:h-56 sm:w-56"
+            style={{ x: glowX, y: glowY }}
+            aria-hidden
+          />
+          <motion.div
+            className="pointer-events-none absolute bottom-[12%] right-[-10%] h-56 w-56 rounded-full bg-white/8 blur-3xl sm:h-72 sm:w-72"
+            style={{ x: inverseGlowX, y: inverseGlowY }}
+            aria-hidden
+          />
+        </>
+      ) : null}
+
       {!reduceMotion && (
         <motion.div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(245,245,245,0.08),transparent_55%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(245,245,245,0.1),transparent_55%)]"
           aria-hidden
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -70,18 +118,23 @@ export function Hero() {
             initial="hidden"
             animate="visible"
           >
-            <motion.h1
-              variants={itemVariants}
-              className="font-display text-4xl font-medium leading-[1.08] tracking-[0.01em] text-white sm:text-5xl md:text-7xl lg:text-[5.25rem]"
-            >
-              The Syntraa
-            </motion.h1>
+            <div className="space-y-2 sm:space-y-3">
+              {heroLines.map((line) => (
+                <motion.h1
+                  key={line}
+                  variants={itemVariants}
+                  className="font-display text-4xl font-medium leading-[1.02] tracking-[0.01em] text-white sm:text-5xl md:text-7xl lg:text-[5.25rem]"
+                >
+                  {line}
+                </motion.h1>
+              ))}
+            </div>
 
             <motion.p
               variants={itemVariants}
               className="max-w-[30ch] text-sm font-light leading-relaxed tracking-[0.14em] text-white/88 sm:max-w-xl sm:text-base sm:tracking-[0.2em] md:text-lg md:tracking-[0.28em]"
             >
-              Luxury in Every Layer
+              Every interaction is crafted to breathe, glide, and stay remembered.
             </motion.p>
 
             <motion.div variants={itemVariants} className="w-full sm:w-auto">

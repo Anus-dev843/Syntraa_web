@@ -33,6 +33,12 @@ export function ProductCard({
         aria-label={`View ${product.name}`}
         className="absolute inset-0 z-10 rounded-2xl"
       />
+      <span
+        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        aria-hidden
+      >
+        <span className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.1),transparent_75%)]" />
+      </span>
       <div className="pointer-events-none relative aspect-[4/5] overflow-hidden">
         <Image
           src={product.image}
@@ -79,7 +85,7 @@ export function ProductCard({
             </span>
           </p>
           <span className="text-[10px] uppercase tracking-[0.26em] text-luxury-muted transition duration-300 group-hover:translate-x-0.5 group-hover:text-luxury-snow">
-            View
+            View +
           </span>
         </div>
       </div>
@@ -87,7 +93,7 @@ export function ProductCard({
   );
 
   const shellClass = cn(
-    "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-luxury-charcoal/65",
+    "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] bg-gradient-to-b from-white/[0.03] via-luxury-charcoal/70 to-luxury-charcoal/60",
     "shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]",
     "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
     "hover:-translate-y-1.5 hover:border-white/18 hover:shadow-[0_32px_72px_-36px_rgba(0,0,0,0.92)]",

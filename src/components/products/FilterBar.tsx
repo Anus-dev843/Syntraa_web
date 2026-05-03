@@ -28,7 +28,11 @@ export function FilterBar({
   }));
 
   return (
-    <div className="sticky top-[4.85rem] z-30 flex flex-col gap-6 rounded-3xl border border-white/10 bg-black/82 px-5 py-6 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:px-10">
+    <div className="relative sticky top-[4.85rem] z-30 flex flex-col gap-6 overflow-hidden rounded-3xl border border-white/10 bg-black/82 px-5 py-6 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:px-10">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_60%_90%_at_50%_0%,rgba(245,245,245,0.08),transparent_72%)]"
+        aria-hidden
+      />
       <div>
         <p className="text-[10px] uppercase tracking-[0.35em] text-luxury-muted">
           Curate capsule
@@ -54,10 +58,10 @@ export function FilterBar({
                 type="button"
                 onClick={() => onCategoryChange(item.id)}
                 className={cn(
-                  "rounded-full border px-4 py-[0.42rem] text-[10px] uppercase tracking-[0.26em] transition focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-luxury-snow",
+                  "rounded-full border px-4 py-[0.42rem] text-[10px] uppercase tracking-[0.26em] transition-[color,border-color,background-color,transform] duration-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-luxury-snow",
                   selected
                     ? "border-transparent bg-luxury-snow text-black"
-                    : "border-white/15 text-luxury-muted hover:border-white/30 hover:text-luxury-snow",
+                    : "border-white/15 text-luxury-muted hover:-translate-y-0.5 hover:border-white/30 hover:text-luxury-snow",
                 )}
               >
                 {item.label}

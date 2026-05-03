@@ -36,6 +36,17 @@ export function CategoryProductGrid({
           {category.subtitle}. Every lot is batched in micro-runs to protect
           glide, slip, and luminous dry-down.
         </p>
+        <div className="mt-7 flex flex-wrap gap-2.5">
+          <span className="rounded-full border border-white/14 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-luxury-muted">
+            curated
+          </span>
+          <span className="rounded-full border border-white/14 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-luxury-muted">
+            small batches
+          </span>
+          <span className="rounded-full border border-white/14 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-luxury-muted">
+            ritual-ready
+          </span>
+        </div>
       </AnimatedSection>
 
       {filtered.length ? (

@@ -4,7 +4,11 @@ import { SocialLinks } from "@/components/layout/SocialLinks";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#030303]">
+    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#030303]">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-[-4rem] h-36 bg-[radial-gradient(ellipse_65%_100%_at_50%_0%,rgba(245,245,245,0.09),transparent_70%)]"
+        aria-hidden
+      />
       <div className="mx-auto max-w-6xl px-[var(--gutter-x)] py-[var(--section-y-lg)] md:py-24">
         <div className="grid gap-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
           {/* About brand */}
@@ -24,7 +28,7 @@ export function Footer() {
               href="mailto:concierge@thesyntraa.example"
               className="mt-2 inline-block text-sm text-luxury-snow transition-colors duration-300 hover:text-white"
             >
-              concierge@thesyntraa.example
+              hello@thesyntraa.com
             </a>
           </div>
 
@@ -109,7 +113,10 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/admin" className="transition-colors duration-300 hover:text-luxury-snow">
+                  <Link
+                    href="/admin"
+                    className="transition-colors duration-300 hover:text-luxury-snow"
+                  >
                     Admin
                   </Link>
                 </li>
@@ -123,7 +130,7 @@ export function Footer() {
           <div className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.26em] text-luxury-muted md:text-right">
             <p>© {new Date().getFullYear()} The Syntraa</p>
             <p className="normal-case tracking-normal text-luxury-muted/80">
-              Worldwide shipping · Carbon-balanced packaging
+              Design that feels · Experiences that resonate
             </p>
           </div>
         </div>

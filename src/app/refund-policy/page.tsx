@@ -8,7 +8,11 @@ export const metadata: Metadata = {
 
 export default function RefundPolicyPage() {
   return (
-    <div className="border-b border-white/10 pb-28 pt-20 md:pb-32 md:pt-28">
+    <div className="relative overflow-hidden border-b border-white/10 pb-28 pt-20 md:pb-32 md:pt-28">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(245,245,245,0.08),transparent_70%)]"
+        aria-hidden
+      />
       <div className="mx-auto max-w-3xl space-y-10 px-6 text-sm leading-relaxed text-luxury-muted md:text-base md:px-10 lg:px-12">
         <div>
           <p className="text-[11px] uppercase tracking-[0.35em] text-luxury-snow">

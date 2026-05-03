@@ -10,14 +10,18 @@ export const metadata: Metadata = {
 
 export default function StoryPage() {
   return (
-    <div className="border-b border-white/10 pb-28 pt-20 md:pb-36 md:pt-28">
+    <div className="relative overflow-hidden border-b border-white/10 pb-28 pt-20 md:pb-36 md:pt-28">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(ellipse_72%_100%_at_50%_0%,rgba(245,245,245,0.1),transparent_70%)]"
+        aria-hidden
+      />
       <div className="mx-auto flex max-w-3xl flex-col gap-24 px-6 md:gap-28 md:px-10 lg:px-12">
         <AnimatedSection className="space-y-6">
           <p className="text-[0.65rem] uppercase tracking-[0.35em] text-luxury-muted">
             Lineage archive
           </p>
-          <h1 className="font-display text-4xl tracking-tight text-luxury-snow md:text-6xl">
-            The quiet becomes signal.
+          <h1 className="font-display text-4xl leading-[1.03] tracking-tight text-luxury-snow md:text-6xl lg:text-[4.1rem]">
+            Every experience begins with a feeling.
           </h1>
           <p className="text-xl leading-relaxed text-luxury-muted md:text-2xl">
             The Syntraa emerged from mirrored labs where acoustics dictate pace.
@@ -45,7 +49,7 @@ export default function StoryPage() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.08}>
-          <div className="rounded-3xl border border-white/12 bg-black/85 px-8 py-11 md:px-10">
+          <div className="rounded-3xl border border-white/12 bg-gradient-to-br from-white/[0.05] via-transparent to-black px-8 py-11 md:px-10">
             <p className="font-display text-3xl italic text-luxury-snow md:text-4xl">
               “Minimal only when fidelity remains absolute.”
             </p>

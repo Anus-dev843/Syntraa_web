@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import type { Product, Review } from "@/lib/types";
 import { StarRating } from "@/components/ui/StarRating";
 import { ReviewSection } from "@/components/ui/ReviewSection";
 import { useCart } from "@/context/CartContext";
 import { easeLuxury } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 type ProductDetailProps = {
   product: Product;
@@ -23,6 +25,12 @@ export function ProductDetail({
 }: ProductDetailProps) {
   const reduceMotion = useReducedMotion();
   const { addItem, openCart } = useCart();
+  const imageWrapRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: imageWrapRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [4, -4]);
 
   const hasReviews = ratingSummary.count > 0;
   const starsAverage = hasReviews
@@ -40,9 +48,13 @@ export function ProductDetail({
 
   return (
     <motion.div
-      className="border-b border-white/[0.08] bg-black pb-[var(--section-y-lg)] pt-[var(--section-y)] md:pb-28 md:pt-12"
+      className="relative overflow-hidden border-b border-white/[0.08] bg-black pb-[var(--section-y-lg)] pt-[var(--section-y)] md:pb-28 md:pt-12"
       {...motionProps}
     >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(ellipse_72%_100%_at_50%_0%,rgba(245,245,245,0.1),transparent_70%)]"
+        aria-hidden
+      />
       <div className="mx-auto max-w-6xl px-[var(--gutter-x)]">
         <nav className="mb-10 text-[11px] uppercase tracking-[0.28em] text-luxury-muted">
           <Link href="/products" className="transition hover:text-luxury-snow">
@@ -60,20 +72,29 @@ export function ProductDetail({
         </nav>
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 lg:items-start">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-luxury-charcoal/40 shadow-[0_40px_100px_-48px_rgba(0,0,0,0.9)]">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+          <div
+            ref={imageWrapRef}
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-luxury-charcoal/40 shadow-[0_40px_100px_-48px_rgba(0,0,0,0.9)]"
+          >
+            <motion.div className="absolute inset-0" style={{ y: imageY }}>
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </motion.div>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.12),transparent_76%)]"
+              aria-hidden
+            />
           </div>
 
-          <div className="flex flex-col gap-8 lg:pt-4">
-            <div>
+          <div className="flex flex-col gap-8 lg:sticky lg:top-28 lg:pt-4">
+            <AnimatedSection>
               <p className="text-[0.65rem] uppercase tracking-[0.36em] text-luxury-muted">
                 The Syntraa · {product.currency}
               </p>
@@ -90,13 +111,18 @@ export function ProductDetail({
                   size="md"
                 />
               </div>
-            </div>
+            </AnimatedSection>
 
-            <p className="max-w-xl text-lg leading-relaxed text-luxury-muted md:text-xl">
-              {product.description}
-            </p>
+            <AnimatedSection delay={0.04}>
+              <p className="max-w-xl text-lg leading-relaxed text-luxury-muted md:text-xl">
+                {product.description}
+              </p>
+            </AnimatedSection>
 
-            <div>
+            <AnimatedSection
+              delay={0.07}
+              className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.05] via-transparent to-black p-6 md:p-7"
+            >
               <h2 className="text-[11px] uppercase tracking-[0.34em] text-luxury-muted">
                 Formulation notes
               </h2>
@@ -116,9 +142,12 @@ export function ProductDetail({
                   Full INCI disclosure is being finalized for this lot.
                 </p>
               )}
-            </div>
+            </AnimatedSection>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <AnimatedSection
+              delay={0.09}
+              className="flex flex-col gap-4 sm:flex-row sm:items-center"
+            >
               <button
                 type="button"
                 className={cn(
@@ -144,7 +173,7 @@ export function ProductDetail({
               >
                 Continue shopping
               </Link>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </div>
