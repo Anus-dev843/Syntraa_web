@@ -1,0 +1,28 @@
+# Web Service (Node) — NOT "Static Site".
+#
+# If you configure the service manually in the Render dashboard, you MUST set:
+#   Build command:  npm install && npm run build
+#   Start command:  npm run start
+# Do NOT put "npm run start" in the Build field — you get "next: not found" (exit 127).
+services:
+  - type: web
+    name: syntraa-web
+    env: node
+    plan: free
+    autoDeploy: true
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

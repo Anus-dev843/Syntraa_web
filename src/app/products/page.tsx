@@ -3,6 +3,8 @@ import { ProductsExplorer } from "@/components/products/ProductsExplorer";
 import { getCatalogProducts } from "@/lib/catalog";
 import { getAllReviews } from "@/lib/products";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Shop formulae",
   description:

@@ -6,8 +6,11 @@ import { ScrollManifesto } from "@/components/home/ScrollManifesto";
 import { StorySection } from "@/components/home/StorySection";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
+import { HomeProductShowcase } from "@/components/home/HomeProductShowcase";
 
 import { getCatalogProducts, getCategoryMetas } from "@/lib/catalog";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const categories = getCategoryMetas();
@@ -23,6 +26,7 @@ export default async function Home() {
       <StorySection />
       <CategoryShowcase categories={categories} />
       <FeaturedProducts seed={inventory} />
+      <HomeProductShowcase products={inventory} />
     </>
   );
 }

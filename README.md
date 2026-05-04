@@ -1,37 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Syntraa Web
 
-## Getting Started
+Production-ready Next.js storefront + secure admin dashboard.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js App Router (`src/app`)
+- React + TypeScript
+- Tailwind CSS
+- Framer Motion
+- File-backed admin store (`src/data/admin-store.json`)
+
+## Project Structure
+
+```text
+.
+├── config/
+│   └── runtime.mjs           # Runtime helpers (PORT/HOST)
+├── data/
+│   ├── products.js           # Seed product catalog
+│   └── products.d.ts
+├── public/
+├── src/
+│   ├── app/                  # App Router pages, layouts, API routes
+│   ├── components/           # UI and feature components
+│   ├── context/              # React context providers
+│   ├── data/                 # Runtime/admin JSON + static datasets
+│   └── lib/                  # Domain logic + utilities
+├── src/middleware.ts         # Admin/auth route protection
+├── server.mjs                # Production entrypoint (uses process.env.PORT)
+└── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` – Local development
+- `npm run build` – Production build
+- `npm run start` – Production server (`server.js`)
+- `npm run lint` – ESLint
+- `npm run typecheck` – TypeScript check
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Local Run
 
-## Learn More
+```bash
+npm install
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Server binds to:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `process.env.PORT` (fallback `3000`)
+- `process.env.HOST` (fallback `0.0.0.0`)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Render Deployment
 
-## Deploy on Vercel
+This repo includes `render.yaml` with:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `buildCommand: npm install && npm run build`
+- `startCommand: npm start`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Syntraa_web
+Compatible with Render web services out of the box.

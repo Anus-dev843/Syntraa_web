@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { hasValidAdminSession } from "./src/lib/admin-auth";
+import { hasValidAdminSession } from "@/lib/admin-auth";
 
 function isPublicAdminPath(pathname: string): boolean {
   return pathname === "/admin/login";

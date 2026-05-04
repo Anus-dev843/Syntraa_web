@@ -1,26 +1,30 @@
 import Link from "next/link";
 
-import type { AdminStore } from "../../lib/types";
-
 type AdminDashboardHomeProps = {
-  store: AdminStore;
+  pageCount: number;
+  productTotal: number;
+  featuredTotal: number;
 };
 
-export function AdminDashboardHome({ store }: AdminDashboardHomeProps) {
+export function AdminDashboardHome({
+  pageCount,
+  productTotal,
+  featuredTotal,
+}: AdminDashboardHomeProps) {
   const cards = [
     {
       label: "Products",
-      value: store.products.length,
+      value: productTotal,
       href: "/admin/products",
     },
     {
       label: "Pages",
-      value: store.pages.length,
+      value: pageCount,
       href: "/admin/pages",
     },
     {
       label: "Featured",
-      value: store.products.filter((p) => p.featured).length,
+      value: featuredTotal,
       href: "/admin/products",
     },
   ];
@@ -29,14 +33,14 @@ export function AdminDashboardHome({ store }: AdminDashboardHomeProps) {
     <div className="space-y-8">
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-[0_32px_72px_-50px_rgba(0,0,0,0.9)] backdrop-blur-xl">
         <p className="text-[0.65rem] uppercase tracking-[0.35em] text-luxury-muted">
-          The Syntraa
+          Syntraa
         </p>
         <h2 className="mt-4 font-display text-4xl tracking-tight text-luxury-snow">
           Welcome back to your command center.
         </h2>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-luxury-muted">
-          Manage products, publish editorial pages, and keep the storefront
-          synchronized from one secure dashboard.
+          Manage products (MongoDB + Cloudinary), publish editorial pages, and keep the
+          storefront synchronized from one secure dashboard.
         </p>
       </section>
 

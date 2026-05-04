@@ -1,0 +1,16 @@
+Render — fix "next: not found" / exit 127
+============================================
+
+Your Build command must INSTALL and BUILD first. Start runs AFTER build.
+
+Dashboard → your Web Service → Settings:
+
+  Build Command:   npm install && npm run build
+  Start Command:   npm run start
+
+WRONG (causes sh: 1: next: not found):
+  Build Command:   npm run start
+
+After saving, trigger Manual Deploy → Clear build cache & deploy.
+
+Health check URL (optional): /api/health

@@ -1,21 +1,24 @@
 "use client";
 
-import React, { startTransition, useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { cn } from "../../lib/utils";
 
-const STORAGE_KEY = "isAdminLoggedIn";
-
 const navItems = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/add-product", label: "Add Product" },
-  { href: "/admin/pages", label: "Pages" },
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/settings", label: "Settings" },
+  { href: "/admin/dashboard", label: "Dashboard", match: (p: string) => p === "/admin/dashboard" || p === "/admin" },
+  {
+    href: "/admin/products",
+    label: "Products",
+    match: (p: string) =>
+      p.startsWith("/admin/products") || p.startsWith("/admin/edit-product"),
+  },
+  { href: "/admin/add-product", label: "Add Product", match: (p: string) => p.startsWith("/admin/add-product") },
+  { href: "/admin/pages", label: "Pages", match: (p: string) => p.startsWith("/admin/pages") },
+  { href: "/admin/orders", label: "Orders", match: (p: string) => p.startsWith("/admin/orders") },
+  { href: "/admin/settings", label: "Settings", match: (p: string) => p.startsWith("/admin/settings") },
 ];
 
 type AdminShellProps = {
@@ -26,40 +29,15 @@ export function AdminShell({ children }: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const reduceMotion = useReducedMotion();
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem(STORAGE_KEY) === "true";
-    if (!isLoggedIn) {
-      router.replace("/admin/login");
-      return;
-    }
-    startTransition(() => {
-      setReady(true);
-    });
-  }, [router]);
 
   const pageTitle = useMemo(() => {
-    const match = navItems.find((item) =>
-      item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href),
-    );
+    const match = navItems.find((item) => item.match(pathname));
     return match?.label ?? "Dashboard";
   }, [pathname]);
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" }).catch(() => {});
-    localStorage.removeItem(STORAGE_KEY);
     router.replace("/admin/login");
-  }
-
-  if (!ready) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-black">
-        <p className="text-sm uppercase tracking-[0.28em] text-luxury-muted">
-          Opening admin suite...
-        </p>
-      </div>
-    );
   }
 
   return (
@@ -73,7 +51,7 @@ export function AdminShell({ children }: AdminShellProps) {
         >
           <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-4">
             <p className="text-[0.62rem] uppercase tracking-[0.36em] text-luxury-muted">
-              The Syntraa
+              Syntraa
             </p>
             <p className="mt-2 font-display text-2xl tracking-tight text-luxury-snow">
               Admin
@@ -82,10 +60,7 @@ export function AdminShell({ children }: AdminShellProps) {
 
           <nav className="mt-6 flex-1 space-y-1" aria-label="Admin navigation">
             {navItems.map((item) => {
-              const active =
-                item.href === "/admin"
-                  ? pathname === "/admin"
-                  : pathname.startsWith(item.href);
+              const active = item.match(pathname);
               return (
                 <Link
                   key={item.href}

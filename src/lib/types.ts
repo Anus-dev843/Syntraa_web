@@ -43,7 +43,7 @@ export type CustomPage = {
   updatedAt: string;
 };
 
+/** CMS pages only — catalog products live in MongoDB. */
 export type AdminStore = {
-  products: Product[];
   pages: CustomPage[];
 };

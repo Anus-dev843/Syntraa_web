@@ -14,6 +14,10 @@ export function sessionCookieValue(): string {
   return ADMIN_SESSION_VALUE;
 }
 
+export function isValidAdminSessionValue(value: string | undefined): boolean {
+  return value === ADMIN_SESSION_VALUE;
+}
+
 export function hasValidAdminSession(request: NextRequest): boolean {
-  return request.cookies.get(ADMIN_SESSION_COOKIE)?.value === ADMIN_SESSION_VALUE;
+  return isValidAdminSessionValue(request.cookies.get(ADMIN_SESSION_COOKIE)?.value);
 }

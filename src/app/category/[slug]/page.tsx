@@ -9,6 +9,8 @@ import { isValidCategorySlug } from "@/lib/products";
 
 import { CATEGORY_SLUGS } from "@/lib/constants";
 
+export const dynamic = "force-dynamic";
+
 export async function generateStaticParams() {
   return CATEGORY_SLUGS.map((slug) => ({ slug }));
 }

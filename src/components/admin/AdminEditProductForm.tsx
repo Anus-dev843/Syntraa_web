@@ -4,33 +4,27 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CATEGORY_SLUGS, type CategorySlug } from "../../lib/constants";
+import type { Product } from "../../lib/types";
 
-type ProductDraft = {
-  name: string;
-  price: number;
-  description: string;
-  category: CategorySlug;
-  image: string;
-  featured: boolean;
+type Props = {
+  product: Product;
 };
 
-const emptyDraft: ProductDraft = {
-  name: "",
-  price: 0,
-  description: "",
-  category: CATEGORY_SLUGS[0],
-  image: "",
-  featured: false,
-};
-
-export function AdminAddProductForm() {
+export function AdminEditProductForm({ product }: Props) {
   const router = useRouter();
-  const [draft, setDraft] = useState(emptyDraft);
+  const [draft, setDraft] = useState({
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    category: product.category,
+    image: product.image,
+    featured: product.featured,
+  });
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
 
-  function setField<K extends keyof ProductDraft>(key: K, value: ProductDraft[K]) {
+  function setField<K extends keyof typeof draft>(key: K, value: (typeof draft)[K]) {
     setDraft((prev) => ({ ...prev, [key]: value }));
   }
 
@@ -62,8 +56,8 @@ export function AdminAddProductForm() {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/products", {
-        method: "POST",
+      const res = await fetch(`/api/products/${product.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: draft.name,
@@ -76,7 +70,7 @@ export function AdminAddProductForm() {
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
-        setError(data.error ?? "Could not create product.");
+        setError(data.error ?? "Could not update product.");
         return;
       }
       router.replace("/admin/products");
@@ -93,11 +87,8 @@ export function AdminAddProductForm() {
         Product management
       </p>
       <h2 className="mt-4 font-display text-4xl tracking-tight text-luxury-snow">
-        Add product
+        Edit product
       </h2>
-      <p className="mt-4 text-sm leading-relaxed text-luxury-muted">
-        Images upload to Cloudinary (no local storage). Catalog is stored in MongoDB.
-      </p>
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit}>
         <label className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.3em] text-luxury-muted">
@@ -151,7 +142,7 @@ export function AdminAddProductForm() {
         </label>
 
         <label className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.3em] text-luxury-muted">
-          Image (Cloudinary)
+          Replace image
           <input
             type="file"
             accept="image/*"
@@ -165,12 +156,11 @@ export function AdminAddProductForm() {
         </label>
 
         <label className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.3em] text-luxury-muted">
-          Image URL (https — filled after upload, or paste Cloudinary URL)
+          Image URL (https)
           <input
             className="rounded-2xl border border-white/15 bg-black/35 px-4 py-3 text-sm text-luxury-snow"
             value={draft.image}
             onChange={(event) => setField("image", event.target.value)}
-            placeholder="https://res.cloudinary.com/..."
             required
           />
         </label>
@@ -187,13 +177,22 @@ export function AdminAddProductForm() {
 
         {error ? <p className="text-sm text-rose-300">{error}</p> : null}
 
-        <button
-          type="submit"
-          disabled={busy || uploadBusy}
-          className="rounded-full bg-luxury-snow px-9 py-3 text-[11px] uppercase tracking-[0.32em] text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {busy ? "Saving..." : uploadBusy ? "Uploading..." : "Add product"}
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="submit"
+            disabled={busy || uploadBusy}
+            className="rounded-full bg-luxury-snow px-9 py-3 text-[11px] uppercase tracking-[0.32em] text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {busy ? "Saving..." : uploadBusy ? "Uploading..." : "Save changes"}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="rounded-full border border-white/20 px-9 py-3 text-[11px] uppercase tracking-[0.32em] text-luxury-muted transition hover:border-white/40 hover:text-luxury-snow"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </section>
   );

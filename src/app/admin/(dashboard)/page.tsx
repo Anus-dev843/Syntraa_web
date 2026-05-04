@@ -1,7 +1,5 @@
-import { AdminDashboardHome } from "../../../components/admin/AdminDashboardHome";
-import { readAdminStore } from "../../../lib/admin-json";
+import { redirect } from "next/navigation";
 
-export default async function AdminDashboardPage() {
-  const store = await readAdminStore();
-  return <AdminDashboardHome store={store} />;
+export default function AdminRootRedirect() {
+  redirect("/admin/dashboard");
 }

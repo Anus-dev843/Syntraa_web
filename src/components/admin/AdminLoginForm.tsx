@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const STORAGE_KEY = "isAdminLoggedIn";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -11,12 +9,6 @@ export function AdminLoginForm() {
   const [password, setPassword] = useState("123456");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY) === "true") {
-      router.replace("/admin");
-    }
-  }, [router]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,8 +25,7 @@ export function AdminLoginForm() {
         setError(data.error ?? "Login failed.");
         return;
       }
-      localStorage.setItem(STORAGE_KEY, "true");
-      router.replace("/admin");
+      router.replace("/admin/dashboard");
     } catch {
       setError("Could not contact login API.");
     } finally {
