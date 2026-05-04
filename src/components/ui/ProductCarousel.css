@@ -1,0 +1,73 @@
+/* Scoped to .syntraa-product-carousel — Swiper slide states + chrome */
+
+.syntraa-product-carousel .swiper-slide .carousel-card-shell {
+  transition:
+    transform 0.45s ease-in-out,
+    opacity 0.45s ease-in-out,
+    filter 0.45s ease-in-out,
+    box-shadow 0.45s ease-in-out;
+}
+
+.syntraa-product-carousel .swiper-slide:not(.swiper-slide-active) .carousel-card-shell {
+  transform: scale(0.82);
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.syntraa-product-carousel .swiper-slide-active .carousel-card-shell {
+  transform: scale(1);
+  opacity: 1;
+  filter: blur(0);
+}
+
+.syntraa-product-carousel .swiper-button-prev,
+.syntraa-product-carousel .swiper-button-next {
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 245, 245, 0.14);
+  background: rgba(8, 8, 8, 0.65);
+  color: rgba(245, 245, 245, 0.85);
+  backdrop-filter: blur(12px);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.syntraa-product-carousel .swiper-button-prev::after,
+.syntraa-product-carousel .swiper-button-next::after {
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.syntraa-product-carousel .swiper-button-prev:hover,
+.syntraa-product-carousel .swiper-button-next:hover {
+  background: rgba(245, 245, 245, 0.08);
+  border-color: rgba(245, 245, 245, 0.28);
+  color: #f5f5f5;
+}
+
+.syntraa-product-carousel .swiper-button-disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.syntraa-product-carousel .swiper-pagination-bullet {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: rgba(245, 245, 245, 0.25);
+  opacity: 1;
+  transition:
+    background 0.35s ease,
+    transform 0.35s ease;
+}
+
+.syntraa-product-carousel .swiper-pagination-bullet-active {
+  background: #f5f5f5;
+  transform: scale(1.35);
+}

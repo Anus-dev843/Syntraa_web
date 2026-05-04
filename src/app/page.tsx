@@ -7,6 +7,7 @@ import { StorySection } from "@/components/home/StorySection";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { HomeProductShowcase } from "@/components/home/HomeProductShowcase";
+import { ProductCarousel } from "@/components/ui/ProductCarousel";
 
 import { getCatalogProducts, getCategoryMetas } from "@/lib/catalog";
 
@@ -26,6 +27,7 @@ export default async function Home() {
       <StorySection />
       <CategoryShowcase categories={categories} />
       <FeaturedProducts seed={inventory} />
+      <ProductCarousel products={inventory} />
       <HomeProductShowcase products={inventory} />
     </>
   );
