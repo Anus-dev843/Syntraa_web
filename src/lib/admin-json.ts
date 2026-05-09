@@ -8,7 +8,11 @@ import type { AdminStore, CustomPage } from "./types";
 const STORE_REL = ["src", "data", "admin-store.json"] as const;
 
 function storePath() {
-  return path.join(process.cwd(), ...STORE_REL);
+  return path.join(
+    /* turbopackIgnore: true */
+    process.cwd(),
+    ...STORE_REL,
+  );
 }
 
 export const RESERVED_PAGE_SLUGS = new Set([

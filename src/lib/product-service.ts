@@ -68,14 +68,39 @@ export async function getProductById(id: string): Promise<Product | undefined> {
   return normalizeProduct(mongoDocToProduct(doc as ProductDocument));
 }
 
+/** Total visible images on detail = 1 cover + up to (MAX_GALLERY_EXTRAS) extras. */
+export const MAX_GALLERY_EXTRAS = 7;
+
 export type CreateProductPayload = {
   name: string;
   price: number;
   description: string;
   category: string;
   image: string;
+  /** Extra gallery images (excludes the primary `image`). Capped at MAX_GALLERY_EXTRAS. */
+  images?: string[];
   featured?: boolean;
 };
+
+function sanitizeGalleryImages(
+  raw: unknown,
+  cover: string,
+): string[] {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set<string>();
+  if (cover) seen.add(cover);
+  const out: string[] = [];
+  for (const item of raw) {
+    if (typeof item !== "string") continue;
+    const url = item.trim();
+    if (!url.startsWith("https://")) continue;
+    if (seen.has(url)) continue;
+    seen.add(url);
+    out.push(url);
+    if (out.length >= MAX_GALLERY_EXTRAS) break;
+  }
+  return out;
+}
 
 export async function createProduct(payload: CreateProductPayload): Promise<Product | null> {
   if (!(await connectDB())) {
@@ -91,12 +116,15 @@ export async function createProduct(payload: CreateProductPayload): Promise<Prod
   const shortDescription =
     description.length > 160 ? `${description.slice(0, 157)}…` : description;
 
+  const images = sanitizeGalleryImages(payload.images, image);
+
   const doc = await ProductModel.create({
     name,
     price,
     description,
     category,
     image,
+    images,
     slug,
     featured: Boolean(payload.featured),
     currency: "USD",
@@ -131,6 +159,12 @@ export async function updateProduct(payload: UpdateProductPayload): Promise<Prod
     existing.category = normalizeCategory(rest.category);
   }
   if (rest.image !== undefined) existing.image = rest.image.trim();
+  if (rest.images !== undefined) {
+    existing.images = sanitizeGalleryImages(
+      rest.images,
+      (rest.image ?? existing.image ?? "").toString().trim(),
+    );
+  }
   if (rest.featured !== undefined) existing.featured = Boolean(rest.featured);
 
   if (rest.name !== undefined) {
@@ -171,6 +205,7 @@ export async function seedProductsFromSeedFile(
       description: p.description || p.shortDescription || "",
       category: normalizeCategory(p.category),
       image: p.image,
+      images: sanitizeGalleryImages(p.images, p.image),
       slug,
       featured: Boolean(p.featured),
       currency: p.currency || "USD",

@@ -7,6 +7,8 @@ const productSchema = new Schema(
     description: { type: String, required: true, trim: true },
     category: { type: String, required: true, trim: true, lowercase: true },
     image: { type: String, required: true, trim: true },
+    /** Extra gallery images (excludes primary `image`). Max 7 enforced in service. */
+    images: { type: [String], default: [] },
     slug: { type: String, required: true, trim: true, lowercase: true, unique: true },
     featured: { type: Boolean, default: false },
     currency: { type: String, default: "USD", trim: true },

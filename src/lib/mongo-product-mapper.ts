@@ -7,6 +7,10 @@ export function mongoDocToProduct(doc: ProductDocument): Product {
   const short =
     doc.shortDescription?.trim() ||
     (description.length > 160 ? `${description.slice(0, 157)}…` : description);
+  const rawImages = Array.isArray(doc.images) ? doc.images : [];
+  const images = rawImages.filter(
+    (u): u is string => typeof u === "string" && u.length > 0 && u !== doc.image,
+  );
   return {
     id,
     name: doc.name,
@@ -15,6 +19,7 @@ export function mongoDocToProduct(doc: ProductDocument): Product {
     price: doc.price,
     currency: doc.currency || "USD",
     image: doc.image,
+    images,
     featured: Boolean(doc.featured),
     shortDescription: short,
     description,

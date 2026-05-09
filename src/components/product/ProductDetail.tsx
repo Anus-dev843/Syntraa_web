@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { Product, Review } from "@/lib/types";
 import { StarRating } from "@/components/ui/StarRating";
 import { ReviewSection } from "@/components/ui/ReviewSection";
@@ -31,6 +31,25 @@ export function ProductDetail({
     offset: ["start end", "end start"],
   });
   const imageY = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [4, -4]);
+
+  const gallery = useMemo(() => {
+    const seen = new Set<string>();
+    const items: string[] = [];
+    if (product.image) {
+      seen.add(product.image);
+      items.push(product.image);
+    }
+    for (const u of product.images ?? []) {
+      if (typeof u === "string" && u && !seen.has(u)) {
+        seen.add(u);
+        items.push(u);
+      }
+    }
+    return items;
+  }, [product.image, product.images]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeImage = gallery[activeIndex] ?? product.image;
 
   const hasReviews = ratingSummary.count > 0;
   const starsAverage = hasReviews
@@ -72,25 +91,71 @@ export function ProductDetail({
         </nav>
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 lg:items-start">
-          <div
-            ref={imageWrapRef}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-luxury-charcoal/40 shadow-[0_40px_100px_-48px_rgba(0,0,0,0.9)]"
-          >
-            <motion.div className="absolute inset-0" style={{ y: imageY }}>
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </motion.div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+          <div className="flex flex-col gap-4">
             <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.12),transparent_76%)]"
-              aria-hidden
-            />
+              ref={imageWrapRef}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-luxury-charcoal/40 shadow-[0_40px_100px_-48px_rgba(0,0,0,0.9)]"
+            >
+              <motion.div
+                key={activeImage}
+                className="absolute inset-0"
+                style={{ y: imageY }}
+                initial={reduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.35, ease: easeLuxury }}
+              >
+                <Image
+                  src={activeImage}
+                  alt={product.name}
+                  fill
+                  priority={activeIndex === 0}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </motion.div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.12),transparent_76%)]"
+                aria-hidden
+              />
+            </div>
+
+            {gallery.length > 1 ? (
+              <ul
+                className="flex gap-3 overflow-x-auto pb-1"
+                role="listbox"
+                aria-label="Product gallery"
+              >
+                {gallery.map((src, idx) => {
+                  const selected = idx === activeIndex;
+                  return (
+                    <li key={`${src}-${idx}`} className="shrink-0">
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={selected}
+                        aria-label={`View image ${idx + 1} of ${gallery.length}`}
+                        onClick={() => setActiveIndex(idx)}
+                        className={cn(
+                          "relative size-20 overflow-hidden rounded-xl border bg-luxury-charcoal/40 transition",
+                          selected
+                            ? "border-luxury-snow/80"
+                            : "border-white/10 hover:border-white/30",
+                        )}
+                      >
+                        <Image
+                          src={src}
+                          alt=""
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-8 lg:sticky lg:top-28 lg:pt-4">

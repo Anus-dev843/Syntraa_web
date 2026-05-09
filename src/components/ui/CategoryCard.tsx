@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { CategoryMeta } from "@/lib/types";
@@ -29,49 +30,53 @@ export function CategoryCard({
   const wrapperClass =
     "group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050505] shadow-[0_0_0_1px_rgba(255,255,255,0.035)_inset] transition-[border-color,box-shadow,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-white/18 hover:shadow-[0_28px_80px_-36px_rgba(0,0,0,0.88)] motion-reduce:hover:translate-y-0 active:scale-[0.992] motion-reduce:active:scale-100";
 
-  const placeholder = (
+  const cover = (
     <div className="relative aspect-[3/4] overflow-hidden bg-[#030303] sm:aspect-[4/5]">
+      {category.image ? (
+        <Image
+          src={category.image}
+          alt={title}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+          className={cn(
+            "object-cover",
+            "transition-transform duration-[760ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform",
+            "group-hover:scale-[1.06] motion-reduce:group-hover:scale-100",
+          )}
+        />
+      ) : (
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-br from-[#0c0c0c] via-[#050505] to-[#111]",
+            "transition-transform duration-[760ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform",
+            "group-hover:scale-[1.06] motion-reduce:group-hover:scale-100",
+          )}
+        />
+      )}
       <div
-        className={cn(
-          "absolute inset-0 origin-center bg-gradient-to-br from-[#0c0c0c] via-[#050505] to-[#111]",
-          "transition-transform duration-[760ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform",
-          "group-hover:scale-[1.06] motion-reduce:group-hover:scale-100",
-        )}
+        className="pointer-events-none absolute inset-0 bg-black/30 transition-opacity duration-500 group-hover:bg-black/15"
+        aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay"
-        style={{
-          backgroundImage: `radial-gradient(circle at 25% 15%, rgba(245,245,245,0.11) 0%, transparent 42%),
-            radial-gradient(circle at 80% 70%, rgba(245,245,245,0.055) 0%, transparent 38%)`,
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.11]"
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
         style={{
           backgroundImage:
-            "linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.035) 45%, transparent 78%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.028) 2px, rgba(255,255,255,0.028) 3px)",
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.045) 2px, rgba(255,255,255,0.045) 3px)",
         }}
       />
       <span
-        className="pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[clamp(4.5rem,18vw,7rem)] font-medium leading-none tracking-tight text-white/[0.042]"
+        className="pointer-events-none absolute right-3 top-3 font-display text-3xl leading-none text-luxury-snow/70 mix-blend-screen md:right-4 md:top-4 md:text-4xl"
         aria-hidden
       >
         {title.slice(0, 1)}
       </span>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black via-black/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black via-black/85 to-transparent" />
     </div>
   );
 
   const body = (
     <>
-      {placeholder}
+      {cover}
       <div className="relative border-t border-white/[0.055] bg-black/92 px-5 py-5 md:px-7 md:py-6">
         <p className="mb-1.5 text-[0.6rem] uppercase tracking-[0.38em] text-luxury-muted">
           {category.subtitle}

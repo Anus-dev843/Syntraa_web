@@ -2,14 +2,19 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
 import { isMongoConfigured } from "@/lib/mongodb";
-import { deleteProduct, getProductById, updateProduct } from "@/lib/product-service";
+import {
+  MAX_GALLERY_EXTRAS,
+  deleteProduct,
+  getProductById,
+  updateProduct,
+} from "@/lib/product-service";
 import { revalidateCatalogPaths } from "@/lib/revalidate-catalog";
 
 function databaseNotConfigured() {
   return NextResponse.json(
     {
       error:
-        "Database not configured. Set MONGODB_URI in the environment (e.g. .env.local or your host dashboard).",
+        "Database not configured. Set MONGODB_URI in .env.local (or your host dashboard) and restart the dev server.",
     },
     { status: 503 },
   );
@@ -74,6 +79,33 @@ export async function PUT(request: NextRequest, context: Ctx) {
         );
       }
       patch.image = b.image;
+    }
+    if (b.images !== undefined) {
+      if (!Array.isArray(b.images)) {
+        return NextResponse.json(
+          { error: "images must be an array of https URLs." },
+          { status: 400 },
+        );
+      }
+      if (b.images.length > MAX_GALLERY_EXTRAS) {
+        return NextResponse.json(
+          {
+            error: `Up to ${MAX_GALLERY_EXTRAS} extra images allowed (8 total with cover).`,
+          },
+          { status: 400 },
+        );
+      }
+      const list: string[] = [];
+      for (const u of b.images) {
+        if (typeof u !== "string" || !u.startsWith("https://")) {
+          return NextResponse.json(
+            { error: "Each gallery image must be an https URL." },
+            { status: 400 },
+          );
+        }
+        list.push(u);
+      }
+      patch.images = list;
     }
     if (b.price !== undefined) {
       const price = typeof b.price === "number" ? b.price : Number(b.price);

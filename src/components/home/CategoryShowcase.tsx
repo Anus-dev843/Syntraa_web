@@ -32,8 +32,8 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
             Five lines of ritual.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-luxury-muted md:text-xl">
-            Shampoo, Facewash, Serums, Bodycare, and Haircare — each capsule
-            composed in monochrome calm. Hover to reveal depth.
+            Facewash, Facial Care, Hair Care, Bodywash, and Serums — each
+            capsule composed in monochrome calm. Hover to reveal depth.
           </p>
         </AnimatedSection>
 

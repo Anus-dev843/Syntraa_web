@@ -1,6 +1,7 @@
 export const CATEGORY_SLUGS = [
   "shampoo",
   "facewash",
+  "facialcare",
   "serums",
   "bodycare",
   "haircare",

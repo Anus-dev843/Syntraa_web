@@ -2,14 +2,38 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
 import { isMongoConfigured } from "@/lib/mongodb";
-import { createProduct, listProducts } from "@/lib/product-service";
+import {
+  MAX_GALLERY_EXTRAS,
+  createProduct,
+  listProducts,
+} from "@/lib/product-service";
 import { revalidateCatalogPaths } from "@/lib/revalidate-catalog";
+
+function validateImagesPayload(value: unknown): string[] | { error: string } {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) {
+    return { error: "images must be an array of https URLs." };
+  }
+  if (value.length > MAX_GALLERY_EXTRAS) {
+    return {
+      error: `Up to ${MAX_GALLERY_EXTRAS} extra images allowed (8 total with cover).`,
+    };
+  }
+  const out: string[] = [];
+  for (const u of value) {
+    if (typeof u !== "string" || !u.startsWith("https://")) {
+      return { error: "Each gallery image must be an https URL." };
+    }
+    out.push(u);
+  }
+  return out;
+}
 
 function databaseNotConfigured() {
   return NextResponse.json(
     {
       error:
-        "Database not configured. Set MONGODB_URI in the environment (e.g. .env.local on your machine or Render/Vercel env vars).",
+        "Database not configured. Set MONGODB_URI in .env.local (or your host’s env vars). Restart the dev server after saving.",
     },
     { status: 503 },
   );
@@ -62,6 +86,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const imagesResult = validateImagesPayload(b.images);
+    if (!Array.isArray(imagesResult)) {
+      return NextResponse.json({ error: imagesResult.error }, { status: 400 });
+    }
+
     if (!isMongoConfigured()) {
       return databaseNotConfigured();
     }
@@ -71,6 +100,7 @@ export async function POST(request: NextRequest) {
       description,
       category,
       image,
+      images: imagesResult,
       price,
       featured,
     });

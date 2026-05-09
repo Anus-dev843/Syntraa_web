@@ -1,5 +1,5 @@
 import React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import "./globals.css";
 
@@ -19,6 +19,14 @@ const sans = Geist({
   display: "swap",
 });
 
+/** Required for phones: correct scaling, notch safe-areas, status bar tint. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
   title: {
     default: "The Syntraa · Luxury Beauty Care",
@@ -26,6 +34,16 @@ export const metadata: Metadata = {
   },
   description:
     "Minimal, premium beauty formulations — sculpted textures, obsessive finish, monochrome calm.",
+  appleWebApp: {
+    capable: true,
+    title: "The Syntraa",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
 };
 
 export default function RootLayout({

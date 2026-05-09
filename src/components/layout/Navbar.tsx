@@ -137,6 +137,7 @@ export function Navbar() {
         className={cn(
           "sticky top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-500",
           "border-white/[0.07] bg-black/0 backdrop-blur-2xl backdrop-saturate-[1.35] supports-[backdrop-filter]:bg-black/[0.18]",
+          "pt-[env(safe-area-inset-top)]",
           scrolled &&
             "border-white/[0.11] bg-black/30 supports-[backdrop-filter]:bg-black/[0.42]",
         )}

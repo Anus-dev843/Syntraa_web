@@ -14,6 +14,13 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
   useEffect(() => {
     if (reduceMotion) return;
 
+    // Native scrolling on phones/tablets: Lenis fights iOS/Android touch & rubber-banding.
+    if (
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.12,
       smoothWheel: true,

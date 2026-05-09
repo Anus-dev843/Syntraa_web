@@ -42,6 +42,7 @@ export function createProductFromInput(
     price: Math.max(0, cleanPrice),
     currency: "USD",
     image: input.image.trim(),
+    images: [],
     featured: false,
     shortDescription: cleanDescription.slice(0, 160),
     description: cleanDescription,

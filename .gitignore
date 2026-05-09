@@ -20,6 +20,10 @@
 # production
 /build
 
+# editor / local (do not commit)
+.cursor/
+.vscode/
+
 # misc
 .DS_Store
 *.pem

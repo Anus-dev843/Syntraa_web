@@ -15,10 +15,13 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
-        value: 20.19.0
+        value: 22.14.2
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
+        sync: false
+      # Optional: only if Atlas data lives outside the default DB name "syntraa".
+      - key: MONGODB_DB_NAME
         sync: false
       - key: CLOUDINARY_CLOUD_NAME
         sync: false

@@ -2,8 +2,9 @@ import "server-only";
 
 import { type Collection, type Db, MongoClient } from "mongodb";
 
-/** App database (MongoDB creates it on first write). */
-export const SYNTRAA_DB_NAME = "syntraa" as const;
+import { getMongoDbName } from "./mongo-db-name";
+import { getMongoDriverOptions } from "./mongo-driver-options";
+import { resolveMongoUri } from "./mongo-uri";
 
 export const USERS_COLLECTION_NAME = "users" as const;
 
@@ -17,9 +18,11 @@ declare global {
 }
 
 function requireMongoUri(): string {
-  const uri = process.env.MONGODB_URI?.trim();
+  const uri = resolveMongoUri();
   if (!uri) {
-    throw new Error("MONGODB_URI is not set in the environment.");
+    throw new Error(
+      "MongoDB URI is not set. Define MONGODB_URI or DATABASE_URL in the environment (e.g. .env.local).",
+    );
   }
   return uri;
 }
@@ -34,9 +37,9 @@ export function getMongoClientPromise(): Promise<MongoClient> {
     return global.syntraaMongoClientPromise;
   }
   const uri = requireMongoUri();
-  const client = new MongoClient(uri);
+  const client = new MongoClient(uri, getMongoDriverOptions());
   global.syntraaMongoClientPromise = client.connect().then((connected) => {
-    console.log(`[Syntraa MongoDB native] Connected (database "${SYNTRAA_DB_NAME}")`);
+    console.log(`[Syntraa MongoDB native] Connected (database "${getMongoDbName()}")`);
     return connected;
   });
   return global.syntraaMongoClientPromise;
@@ -46,10 +49,10 @@ export async function getMongoClient(): Promise<MongoClient> {
   return getMongoClientPromise();
 }
 
-/** Database `syntraa` — independent of default DB in the connection string. */
+/** Named by `getMongoDbName()` — independent of default DB path in the connection string. */
 export async function getSyntraaDb(): Promise<Db> {
   const client = await getMongoClient();
-  return client.db(SYNTRAA_DB_NAME);
+  return client.db(getMongoDbName());
 }
 
 export async function getUsersCollection(): Promise<Collection<SampleUserDoc>> {

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error:
-          "Database not configured. Set MONGODB_URI in the environment before resetting products.",
+          "Database not configured. Set MONGODB_URI in .env.local (or hosting env vars) before resetting products.",
       },
       { status: 503 },
     );

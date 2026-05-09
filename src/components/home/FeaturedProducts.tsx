@@ -18,10 +18,15 @@ type FeaturedProductsProps = {
 };
 
 export function FeaturedProducts({ seed }: FeaturedProductsProps) {
-  const capsule = useMemo(
-    () => seed.filter((item) => item.featured),
-    [seed],
-  );
+  const capsule = useMemo(() => {
+    const withImage = (p: Product) => Boolean(p.image);
+    const flagged = seed.filter((item) => item.featured).filter(withImage);
+    if (flagged.length) {
+      return flagged.slice(0, 8);
+    }
+    /** No featured SKUs yet — surface recent catalog picks so deploys aren’t visually empty after first imports. */
+    return seed.filter(withImage).slice(0, 8);
+  }, [seed]);
 
   const allReviews = useMemo(() => getAllReviews(), []);
 
@@ -83,9 +88,15 @@ export function FeaturedProducts({ seed }: FeaturedProductsProps) {
             ))}
           </MotionStagger>
         ) : (
-          <p className="mt-14 rounded-3xl border border-white/14 px-8 py-12 text-center text-sm text-luxury-muted md:mt-16">
-            No formulae flagged as curated yet — open admin to elevate new work.
-          </p>
+          <div className="mt-14 rounded-3xl border border-white/14 px-8 py-12 text-center text-sm text-luxury-muted md:mt-16">
+            <p>No pieces in the rotation yet — the grid fills as soon as essentials are stocked.</p>
+            <p className="mx-auto mt-5 max-w-md text-[11px] leading-relaxed text-luxury-muted/80 md:text-xs">
+              Operator: ensure <span className="font-mono text-luxury-snow">MONGODB_URI</span> is set on
+              Render / hosting,               verify{" "}
+              <span className="font-mono text-luxury-snow">/api/health?mongo=1</span>, then publish from
+              admin.
+            </p>
+          </div>
         )}
       </div>
 

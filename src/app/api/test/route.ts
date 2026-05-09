@@ -25,7 +25,10 @@ export async function GET() {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    const status = message.includes("MONGODB_URI") ? 503 : 500;
+    const status =
+      message.includes("MongoDB URI is not set") || message.includes("MONGODB_URI")
+        ? 503
+        : 500;
     console.error("[api/test]", error);
     return NextResponse.json({ ok: false, error: message }, { status });
   }

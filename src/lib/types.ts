@@ -15,7 +15,13 @@ export type Product = {
   category: string;
   price: number;
   currency: string;
+  /** Primary cover image; used on cards, cart, OpenGraph. */
   image: string;
+  /**
+   * Extra gallery images (excludes the primary `image`). Detail page renders
+   * `[image, ...images]` together. Max 7 entries (8 total with cover).
+   */
+  images: string[];
   featured: boolean;
   shortDescription: string;
   /** Long-form copy for product detail. */
