@@ -17,16 +17,14 @@ type FeaturedProductsProps = {
   seed: Product[];
 };
 
+function productHasCover(p: Product) {
+  return Boolean(p.image);
+}
+
 export function FeaturedProducts({ seed }: FeaturedProductsProps) {
-  const capsule = useMemo(() => {
-    const withImage = (p: Product) => Boolean(p.image);
-    const flagged = seed.filter((item) => item.featured).filter(withImage);
-    if (flagged.length) {
-      return flagged.slice(0, 8);
-    }
-    /** No featured SKUs yet — surface recent catalog picks so deploys aren’t visually empty after first imports. */
-    return seed.filter(withImage).slice(0, 8);
-  }, [seed]);
+  const featuredPick = seed.filter((item) => item.featured).filter(productHasCover);
+  const capsule =
+    featuredPick.length > 0 ? featuredPick.slice(0, 8) : seed.filter(productHasCover).slice(0, 8);
 
   const allReviews = useMemo(() => getAllReviews(), []);
 
