@@ -8,6 +8,7 @@ function normalizeCatalogImageUrl(input: unknown): string {
   if (t.startsWith("https://")) return t;
   if (t.startsWith("http://")) return `https://${t.slice("http://".length)}`;
   if (t.startsWith("//")) return `https:${t}`;
+  if (t.startsWith("/")) return t;
   return "";
 }
 
@@ -20,7 +21,9 @@ export function normalizeProduct(raw: Product): Product {
     ? raw.images
         .map((u) => normalizeCatalogImageUrl(u))
         .filter((u): u is string => {
-          if (!u.startsWith("https://") || seen.has(u)) return false;
+          const ok =
+            u.startsWith("https://") || (u.startsWith("/") && !u.startsWith("//"));
+          if (!ok || seen.has(u)) return false;
           seen.add(u);
           return true;
         })

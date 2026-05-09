@@ -11,8 +11,7 @@ export const PRODUCTS = [
     category: "shampoo",
     price: 52,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1556228720-1920217b7442?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/hair-care/img-001.jpeg",
     featured: true,
     shortDescription: "Weightless hydration with cold-pressed botanicals.",
     description:
@@ -34,8 +33,7 @@ export const PRODUCTS = [
     category: "facewash",
     price: 42,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/face-care/img-001.jpeg",
     featured: true,
     shortDescription: "Cream foam that melts away impurities without stripping.",
     description:
@@ -57,8 +55,7 @@ export const PRODUCTS = [
     category: "serums",
     price: 128,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/serums/img-001.jpeg",
     featured: true,
     shortDescription: "Dual-phase peptides for visibly even tone overnight.",
     description:
@@ -80,8 +77,7 @@ export const PRODUCTS = [
     category: "bodycare",
     price: 78,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1608248597279-f99d060bfcce?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/body-care/img-001.jpeg",
     featured: true,
     shortDescription: "Dry-touch oil veil with jasmine and steamed vanilla.",
     description:
@@ -102,8 +98,7 @@ export const PRODUCTS = [
     category: "haircare",
     price: 64,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1526947425960-b4dcf4fba213?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/hair-care/img-002.jpeg",
     featured: true,
     shortDescription: "Featherlight finish heat-shield complex.",
     description:
@@ -124,8 +119,7 @@ export const PRODUCTS = [
     category: "haircare",
     price: 54,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1503951914875-452162fa0ebb?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/hair-care/img-003.jpeg",
     featured: false,
     shortDescription: "Rebuilds brittle lengths with peptide ceramides.",
     description:
@@ -146,8 +140,7 @@ export const PRODUCTS = [
     category: "shampoo",
     price: 48,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1571875257727-136c99714d12?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/hair-care/img-001.jpeg",
     featured: false,
     shortDescription: "Daily reset for oily roots without harsh surfactants.",
     description:
@@ -168,8 +161,7 @@ export const PRODUCTS = [
     category: "facewash",
     price: 38,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1570172617284-dd931b1dad47?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/face-care/img-003.jpeg",
     featured: false,
     shortDescription: "Clay micro-spheres diffuse shine for hours.",
     description:
@@ -190,8 +182,7 @@ export const PRODUCTS = [
     category: "serums",
     price: 96,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1608571423902-eed4ef5ff5e1?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/serums/img-004.jpeg",
     featured: false,
     shortDescription: "4D hyaluronic stack for supple bounce.",
     description:
@@ -213,8 +204,7 @@ export const PRODUCTS = [
     category: "bodycare",
     price: 58,
     currency: "USD",
-    image:
-      "https://images.unsplash.com/photo-1616394584738-fc96e7921125?q=80&w=1200&auto=format&fit=crop",
+    image: "/mockups/body-care/img-005.jpeg",
     featured: false,
     shortDescription: "Mineral resurfacing balm with cooling finish.",
     description:

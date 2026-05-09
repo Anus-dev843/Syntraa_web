@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
+import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
 import { isMongoConfigured } from "@/lib/mongodb";
 import {
   MAX_GALLERY_EXTRAS,
@@ -12,7 +13,7 @@ import { revalidateCatalogPaths } from "@/lib/revalidate-catalog";
 function validateImagesPayload(value: unknown): string[] | { error: string } {
   if (value === undefined || value === null) return [];
   if (!Array.isArray(value)) {
-    return { error: "images must be an array of https URLs." };
+    return { error: "images must be an array of https URLs or paths starting with /." };
   }
   if (value.length > MAX_GALLERY_EXTRAS) {
     return {
@@ -21,8 +22,8 @@ function validateImagesPayload(value: unknown): string[] | { error: string } {
   }
   const out: string[] = [];
   for (const u of value) {
-    if (typeof u !== "string" || !u.startsWith("https://")) {
-      return { error: "Each gallery image must be an https URL." };
+    if (typeof u !== "string" || !isAllowedCatalogImageUrl(u)) {
+      return { error: "Each gallery image must be https://… or same-site path starting with /." };
     }
     out.push(u);
   }
@@ -79,9 +80,9 @@ export async function POST(request: NextRequest) {
     if (!Number.isFinite(price) || price < 0) {
       return NextResponse.json({ error: "price must be a non-negative number." }, { status: 400 });
     }
-    if (!image.startsWith("https://")) {
+    if (!isAllowedCatalogImageUrl(image)) {
       return NextResponse.json(
-        { error: "image must be an https URL (e.g. Cloudinary secure_url)." },
+        { error: "image must be https://… (e.g. Cloudinary) or same-site path /mockups/…" },
         { status: 400 },
       );
     }

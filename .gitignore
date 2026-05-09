@@ -45,5 +45,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Built from `Syntraa MockUp` during `npm run dev` / `npm run build` (see scripts/sync-mockups-to-public.mjs)
+/public/mockups/
+
 # admin dashboard runtime JSON (seeded from products.json on first read)
 src/data/admin-store.json

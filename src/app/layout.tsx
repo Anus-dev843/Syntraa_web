@@ -6,6 +6,11 @@ import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { AppShell } from "../components/layout/AppShell";
 
+const siteOrigin =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
+  process.env.SITE_ORIGIN?.replace(/\/+$/, "") ||
+  "https://www.thesyntraa.com";
+
 const display = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
@@ -28,6 +33,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteOrigin),
   title: {
     default: "The Syntraa · Luxury Beauty Care",
     template: "%s · The Syntraa",

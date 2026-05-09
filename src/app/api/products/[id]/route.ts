@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
+import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
 import { isMongoConfigured } from "@/lib/mongodb";
 import {
   MAX_GALLERY_EXTRAS,
@@ -72,9 +73,9 @@ export async function PUT(request: NextRequest, context: Ctx) {
       patch.category = b.category;
     }
     if (b.image !== undefined) {
-      if (typeof b.image !== "string" || !b.image.startsWith("https://")) {
+      if (typeof b.image !== "string" || !isAllowedCatalogImageUrl(b.image)) {
         return NextResponse.json(
-          { error: "image must be an https URL." },
+          { error: "image must be https://… or same-site path /…" },
           { status: 400 },
         );
       }
@@ -83,7 +84,7 @@ export async function PUT(request: NextRequest, context: Ctx) {
     if (b.images !== undefined) {
       if (!Array.isArray(b.images)) {
         return NextResponse.json(
-          { error: "images must be an array of https URLs." },
+          { error: "images must be an array of https URLs or / paths." },
           { status: 400 },
         );
       }
@@ -97,9 +98,9 @@ export async function PUT(request: NextRequest, context: Ctx) {
       }
       const list: string[] = [];
       for (const u of b.images) {
-        if (typeof u !== "string" || !u.startsWith("https://")) {
+        if (typeof u !== "string" || !isAllowedCatalogImageUrl(u)) {
           return NextResponse.json(
-            { error: "Each gallery image must be an https URL." },
+            { error: "Each gallery image must be https://… or same-site path /…." },
             { status: 400 },
           );
         }

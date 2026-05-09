@@ -6,6 +6,9 @@
     "node": ">=20.9.0"
   },
   "scripts": {
+    "sync-mockups": "node scripts/sync-mockups-to-public.mjs",
+    "predev": "npm run sync-mockups",
+    "prebuild": "npm run sync-mockups",
     "dev": "next dev",
     "build": "next build",
     "start": "node node_modules/next/dist/bin/next start",

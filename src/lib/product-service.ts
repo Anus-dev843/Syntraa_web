@@ -3,6 +3,7 @@ import "server-only";
 import mongoose from "mongoose";
 
 import { connectDB } from "@/lib/mongodb";
+import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
 import { ProductModel, type ProductDocument } from "@/lib/models/Product";
 import { mongoDocToProduct } from "@/lib/mongo-product-mapper";
 import type { Product } from "@/lib/types";
@@ -93,7 +94,7 @@ function sanitizeGalleryImages(
   for (const item of raw) {
     if (typeof item !== "string") continue;
     const url = item.trim();
-    if (!url.startsWith("https://")) continue;
+    if (!isAllowedCatalogImageUrl(url)) continue;
     if (seen.has(url)) continue;
     seen.add(url);
     out.push(url);
