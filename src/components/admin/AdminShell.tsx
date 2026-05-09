@@ -51,7 +51,7 @@ export function AdminShell({ children }: AdminShellProps) {
         >
           <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-4">
             <p className="text-[0.62rem] uppercase tracking-[0.36em] text-luxury-muted">
-              Syntraa
+              The Syntraa
             </p>
             <p className="mt-2 font-display text-2xl tracking-tight text-luxury-snow">
               Admin
@@ -109,6 +109,29 @@ export function AdminShell({ children }: AdminShellProps) {
               </button>
             </div>
           </header>
+
+          <nav
+            className="flex gap-2 overflow-x-auto overflow-y-hidden border-b border-white/10 bg-black/30 px-5 py-3 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            aria-label="Admin shortcuts"
+          >
+            {navItems.map((item) => {
+              const active = item.match(pathname);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "shrink-0 whitespace-nowrap rounded-full border px-4 py-2.5 text-[10px] uppercase tracking-[0.22em] transition",
+                    active
+                      ? "border-white/35 bg-white/[0.08] text-luxury-snow"
+                      : "border-white/12 text-luxury-muted hover:border-white/25 hover:text-luxury-snow",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
           <main className="flex-1 px-5 py-8 md:px-8 md:py-10">{children}</main>
         </div>

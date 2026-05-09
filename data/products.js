@@ -1,6 +1,6 @@
 /**
  * Central product catalog for The Syntraa.
- * Seeded into admin-store on first run; reset via admin API reloads this list.
+ * Images under /mockups/* are generated from `Syntraa MockUp` at dev/build time (`npm run sync-mockups`).
  * @type {import('../src/lib/types').Product[]}
  */
 export const PRODUCTS = [
@@ -12,6 +12,7 @@ export const PRODUCTS = [
     price: 52,
     currency: "USD",
     image: "/mockups/hair-care/img-001.jpeg",
+    images: ["/mockups/hair-care/img-002.jpeg", "/mockups/hair-care/img-003.jpeg"],
     featured: true,
     shortDescription: "Weightless hydration with cold-pressed botanicals.",
     description:
@@ -34,6 +35,7 @@ export const PRODUCTS = [
     price: 42,
     currency: "USD",
     image: "/mockups/face-care/img-001.jpeg",
+    images: ["/mockups/face-care/img-002.jpeg", "/mockups/face-care/img-003.jpeg"],
     featured: true,
     shortDescription: "Cream foam that melts away impurities without stripping.",
     description:
@@ -56,6 +58,7 @@ export const PRODUCTS = [
     price: 128,
     currency: "USD",
     image: "/mockups/serums/img-001.jpeg",
+    images: ["/mockups/serums/img-002.jpeg", "/mockups/serums/img-003.jpeg"],
     featured: true,
     shortDescription: "Dual-phase peptides for visibly even tone overnight.",
     description:
@@ -78,6 +81,7 @@ export const PRODUCTS = [
     price: 78,
     currency: "USD",
     image: "/mockups/body-care/img-001.jpeg",
+    images: ["/mockups/body-care/img-002.jpeg", "/mockups/body-care/img-003.jpeg"],
     featured: true,
     shortDescription: "Dry-touch oil veil with jasmine and steamed vanilla.",
     description:
@@ -99,6 +103,7 @@ export const PRODUCTS = [
     price: 64,
     currency: "USD",
     image: "/mockups/hair-care/img-002.jpeg",
+    images: ["/mockups/hair-care/img-001.jpeg", "/mockups/hair-care/img-003.jpeg"],
     featured: true,
     shortDescription: "Featherlight finish heat-shield complex.",
     description:
@@ -120,6 +125,7 @@ export const PRODUCTS = [
     price: 54,
     currency: "USD",
     image: "/mockups/hair-care/img-003.jpeg",
+    images: ["/mockups/hair-care/img-001.jpeg", "/mockups/hair-care/img-002.jpeg"],
     featured: false,
     shortDescription: "Rebuilds brittle lengths with peptide ceramides.",
     description:
@@ -141,6 +147,7 @@ export const PRODUCTS = [
     price: 48,
     currency: "USD",
     image: "/mockups/hair-care/img-001.jpeg",
+    images: ["/mockups/hair-care/img-002.jpeg"],
     featured: false,
     shortDescription: "Daily reset for oily roots without harsh surfactants.",
     description:
@@ -161,7 +168,8 @@ export const PRODUCTS = [
     category: "facewash",
     price: 38,
     currency: "USD",
-    image: "/mockups/face-care/img-003.jpeg",
+    image: "/mockups/face-care/img-004.jpeg",
+    images: ["/mockups/face-care/img-005.jpeg", "/mockups/face-care/img-006.jpeg"],
     featured: false,
     shortDescription: "Clay micro-spheres diffuse shine for hours.",
     description:
@@ -182,7 +190,8 @@ export const PRODUCTS = [
     category: "serums",
     price: 96,
     currency: "USD",
-    image: "/mockups/serums/img-004.jpeg",
+    image: "/mockups/serums/img-006.jpeg",
+    images: ["/mockups/serums/img-007.jpeg", "/mockups/serums/img-008.jpeg"],
     featured: false,
     shortDescription: "4D hyaluronic stack for supple bounce.",
     description:
@@ -204,7 +213,8 @@ export const PRODUCTS = [
     category: "bodycare",
     price: 58,
     currency: "USD",
-    image: "/mockups/body-care/img-005.jpeg",
+    image: "/mockups/body-care/img-008.jpeg",
+    images: ["/mockups/body-care/img-009.jpeg", "/mockups/body-care/img-010.jpeg"],
     featured: false,
     shortDescription: "Mineral resurfacing balm with cooling finish.",
     description:

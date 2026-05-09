@@ -228,7 +228,7 @@ export function AdminAddProductForm() {
             className="rounded-2xl border border-white/15 bg-black/35 px-4 py-3 text-sm text-luxury-snow"
             value={draft.image}
             onChange={(event) => setField("image", event.target.value)}
-            placeholder="https://res.cloudinary.com/..."
+            placeholder="https://… (Cloudinary) or /mockups/… path"
             required
           />
         </label>

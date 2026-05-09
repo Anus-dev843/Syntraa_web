@@ -33,7 +33,7 @@ export function AdminDashboardHome({
     <div className="space-y-8">
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 shadow-[0_32px_72px_-50px_rgba(0,0,0,0.9)] backdrop-blur-xl">
         <p className="text-[0.65rem] uppercase tracking-[0.35em] text-luxury-muted">
-          Syntraa
+          The Syntraa
         </p>
         <h2 className="mt-4 font-display text-4xl tracking-tight text-luxury-snow">
           Welcome back to your command center.
@@ -42,6 +42,17 @@ export function AdminDashboardHome({
           Manage products (MongoDB + Cloudinary), publish editorial pages, and keep the
           storefront synchronized from one secure dashboard.
         </p>
+        {productTotal === 0 ? (
+          <p className="mt-6 rounded-2xl border border-amber-500/35 bg-amber-500/[0.07] px-5 py-4 text-sm leading-relaxed text-amber-100/95">
+            <span className="font-medium text-amber-50">MongoDB catalogue is empty.</span> Visitors
+            still see the demo stock from{" "}
+            <code className="rounded-md bg-black/40 px-1.5 py-0.5 font-mono text-xs text-luxury-snow">
+              data/products.js
+            </code>{" "}
+            plus <span className="font-mono text-xs text-luxury-snow">/mockups/</span> art until you
+            add products here — or Atlas fills from another pipeline.
+          </p>
+        ) : null}
       </section>
 
       <section className="grid gap-5 md:grid-cols-3">

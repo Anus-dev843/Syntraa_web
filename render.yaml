@@ -29,3 +29,6 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
+      # Optional production URL — set in dashboard as https://www.thesyntraa.com for OG + metadataBase.
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
