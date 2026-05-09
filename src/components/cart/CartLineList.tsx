@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
@@ -46,7 +46,7 @@ export function CartLineList({ className, onNavigate }: CartLineListProps) {
             onClick={onNavigate}
             className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10"
           >
-            <Image
+            <CatalogImage
               src={line.image}
               alt={line.name}
               fill

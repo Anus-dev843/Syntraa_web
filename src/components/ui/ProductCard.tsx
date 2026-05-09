@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { motion, useReducedMotion } from "framer-motion";
@@ -40,7 +40,7 @@ export function ProductCard({
         <span className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(245,245,245,0.1),transparent_75%)]" />
       </span>
       <div className="pointer-events-none relative aspect-[4/5] overflow-hidden">
-        <Image
+        <CatalogImage
           src={product.image}
           alt={product.name}
           fill

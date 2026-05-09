@@ -24,7 +24,42 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "**.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.cloudinary.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "imagedelivery.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "filesusr.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
     ],

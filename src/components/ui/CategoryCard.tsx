@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { CategoryMeta } from "@/lib/types";
@@ -33,7 +33,7 @@ export function CategoryCard({
   const cover = (
     <div className="relative aspect-[3/4] overflow-hidden bg-[#030303] sm:aspect-[4/5]">
       {category.image ? (
-        <Image
+        <CatalogImage
           src={category.image}
           alt={title}
           fill

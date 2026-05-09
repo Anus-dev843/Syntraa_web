@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 
@@ -80,7 +80,7 @@ export function AdminProductsManager({ initialProducts }: AdminProductsManagerPr
                 >
                   <td className="px-5 py-4">
                     <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-white/10">
-                      <Image
+                      <CatalogImage
                         src={product.image}
                         alt={product.name}
                         fill

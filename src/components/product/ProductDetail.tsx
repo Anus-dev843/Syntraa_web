@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
@@ -104,7 +104,7 @@ export function ProductDetail({
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.35, ease: easeLuxury }}
               >
-                <Image
+                <CatalogImage
                   src={activeImage}
                   alt={product.name}
                   fill
@@ -143,7 +143,7 @@ export function ProductDetail({
                             : "border-white/10 hover:border-white/30",
                         )}
                       >
-                        <Image
+                        <CatalogImage
                           src={src}
                           alt=""
                           fill

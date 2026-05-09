@@ -91,10 +91,11 @@ export function FeaturedProducts({ seed }: FeaturedProductsProps) {
           <div className="mt-14 rounded-3xl border border-white/14 px-8 py-12 text-center text-sm text-luxury-muted md:mt-16">
             <p>No pieces in the rotation yet — the grid fills as soon as essentials are stocked.</p>
             <p className="mx-auto mt-5 max-w-md text-[11px] leading-relaxed text-luxury-muted/80 md:text-xs">
-              Operator: ensure <span className="font-mono text-luxury-snow">MONGODB_URI</span> is set on
-              Render / hosting,               verify{" "}
-              <span className="font-mono text-luxury-snow">/api/health?mongo=1</span>, then publish from
-              admin.
+              Operator: add products via admin / Atlas — or leave fallback on (default) to load demos from{" "}
+              <span className="font-mono text-luxury-snow">data/products.js</span>. To force an empty vitrine
+              with Mongo wired, set{" "}
+              <span className="font-mono text-luxury-snow">SYNTRAA_CATALOG_FALLBACK=false</span>. Health:{" "}
+              <span className="font-mono text-luxury-snow">/api/health?mongo=1</span>.
             </p>
           </div>
         )}

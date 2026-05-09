@@ -2,7 +2,7 @@
 
 import "./ProductCarousel.css";
 
-import Image from "next/image";
+import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useMemo } from "react";
@@ -113,7 +113,7 @@ export function ProductCarousel({
                           data-swiper-parallax="-13%"
                           aria-hidden
                         >
-                          <Image
+                          <CatalogImage
                             src={product.image}
                             alt={product.name}
                             fill
