@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { verifyAdminCredentials } from "@/lib/admin-credentials";
+import {
+  isAdminPasswordConfigured,
+  verifyAdminCredentials,
+} from "@/lib/admin-credentials";
 import {
   ADMIN_SESSION_COOKIE,
   createAdminSessionToken,
@@ -13,14 +16,11 @@ type LoginPayload = {
 
 export async function POST(request: Request) {
   try {
-    if (
-      process.env.NODE_ENV === "production" &&
-      !process.env.ADMIN_PASSWORD_HASH?.trim()
-    ) {
+    if (process.env.NODE_ENV === "production" && !isAdminPasswordConfigured()) {
       return NextResponse.json(
         {
           error:
-            "Admin login is not configured. Set ADMIN_PASSWORD_HASH on the server (see .env.example).",
+            "Admin login is not configured. Set ADMIN_PASSWORD_HASH_BASE64 or ADMIN_PASSWORD_HASH on the server (see .env.example — Render often breaks hashes that contain `$`).",
         },
         { status: 503 },
       );
