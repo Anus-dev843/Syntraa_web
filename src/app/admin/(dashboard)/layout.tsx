@@ -2,7 +2,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { AdminShell } from "../../../components/admin/AdminShell";
-import { ADMIN_SESSION_COOKIE, verifyAdminSessionToken } from "../../../lib/admin-auth";
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSessionToken,
+} from "../../../lib/admin-session";
 
 export default async function AdminDashboardLayout({
   children,

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { hasValidAdminSession } from "@/lib/admin-auth";
+import { hasValidAdminSession } from "@/lib/admin-session";
 import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
 import { formatMongoDriverError } from "@/lib/mongo-api-error";
 import { isMongoConfigured } from "@/lib/mongodb";

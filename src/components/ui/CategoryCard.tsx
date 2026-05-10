@@ -4,8 +4,10 @@ import { CatalogImage } from "@/components/ui/CatalogImage";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { CategoryMeta } from "@/lib/types";
+import { CATEGORY_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { easeLuxury, staggerItem } from "@/lib/motion";
+import { isValidCategorySlug } from "@/lib/products";
 
 type CategoryCardProps = {
   category: CategoryMeta;
@@ -14,7 +16,9 @@ type CategoryCardProps = {
 };
 
 function displayTitle(category: CategoryMeta): string {
-  if (category.slug === "facewash") return "Facewash";
+  if (isValidCategorySlug(category.slug)) {
+    return CATEGORY_LABELS[category.slug];
+  }
   return category.title;
 }
 

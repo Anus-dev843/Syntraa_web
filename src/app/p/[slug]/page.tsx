@@ -6,28 +6,35 @@ import { readAdminStore } from "@/lib/admin-json";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const { pages } = await readAdminStore();
-  return pages.map((p) => ({ slug: p.slug }));
-}
+/** Avoid Mongo/file CMS reads during `next build` (Render often cannot reach Atlas from build workers). */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const { pages } = await readAdminStore();
-  const page = pages.find((p) => p.slug === slug);
-  if (!page) return { title: "Page" };
-  return {
-    title: page.title,
-    description: page.content.slice(0, 155).replace(/\s+/g, " ").trim(),
-  };
+  try {
+    const { slug } = await params;
+    const { pages } = await readAdminStore();
+    const page = pages.find((p) => p.slug === slug);
+    if (!page) return { title: "Page" };
+    return {
+      title: page.title,
+      description: page.content.slice(0, 155).replace(/\s+/g, " ").trim(),
+    };
+  } catch {
+    return { title: "Page" };
+  }
 }
 
 export default async function CustomPageView({ params }: PageProps) {
   const { slug } = await params;
-  const { pages } = await readAdminStore();
-  const page = pages.find((p) => p.slug === slug);
+  let store: Awaited<ReturnType<typeof readAdminStore>>;
+  try {
+    store = await readAdminStore();
+  } catch {
+    notFound();
+  }
+  const page = store.pages.find((p) => p.slug === slug);
   if (!page) {
     notFound();
   }

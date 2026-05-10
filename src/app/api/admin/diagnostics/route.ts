@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { hasValidAdminSession } from "@/lib/admin-auth";
+import { hasValidAdminSession } from "@/lib/admin-session";
 import { getAdminDiagnosticsPayload } from "@/lib/admin-diagnostics";
 
 function unauthorized() {

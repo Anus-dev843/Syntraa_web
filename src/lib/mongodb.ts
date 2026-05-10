@@ -12,6 +12,12 @@ global.syntraaMongoose = cached;
 
 let warnedMissingUri = false;
 let warnedPlaceholderPassword = false;
+/** Last connection error when URI was set but connect failed (health checks / logs). */
+let lastConnectionError: string | undefined;
+
+export function peekLastMongoConnectionError(): string | undefined {
+  return lastConnectionError;
+}
 
 export { isMongoConfigured } from "./mongo-uri";
 
@@ -51,15 +57,23 @@ export async function connectDB(): Promise<typeof mongoose | null> {
   }
   try {
     cached.conn = await cached.promise;
+    lastConnectionError = undefined;
     return cached.conn;
   } catch (e) {
     cached.promise = null;
     cached.conn = null;
+    lastConnectionError = e instanceof Error ? e.message : String(e);
     try {
       await mongoose.disconnect();
     } catch {
       /* ignore */
     }
-    throw e;
+    const label = "[mongodb] Connection failed — callers receive null (file/seed fallbacks apply during build).";
+    if (process.env.NODE_ENV === "development") {
+      console.warn(label, lastConnectionError);
+    } else {
+      console.error(label, lastConnectionError);
+    }
+    return null;
   }
 }

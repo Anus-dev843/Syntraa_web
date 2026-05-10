@@ -3,15 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { CATEGORY_SLUGS } from "@/lib/constants";
+import { CATEGORY_LABELS, CATEGORY_SLUGS } from "@/lib/constants";
 import { useCart } from "@/context/CartContext";
 
 const navCategories = CATEGORY_SLUGS.map((slug) => ({
   slug,
-  label:
-    slug === "facewash"
-      ? "Face wash"
-      : slug.charAt(0).toUpperCase() + slug.slice(1),
+  label: CATEGORY_LABELS[slug],
 }));
 
 const navLink = cn(

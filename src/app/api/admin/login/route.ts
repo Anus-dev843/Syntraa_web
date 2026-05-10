@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
+import { verifyAdminCredentials } from "@/lib/admin-credentials";
 import {
   ADMIN_SESSION_COOKIE,
   createAdminSessionToken,
-  verifyAdminCredentials,
-} from "@/lib/admin-auth";
+} from "@/lib/admin-session";
 
 type LoginPayload = {
   email?: string;

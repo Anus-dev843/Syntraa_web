@@ -9,11 +9,12 @@ export const CATEGORY_SLUGS = [
 
 export type CategorySlug = (typeof CATEGORY_SLUGS)[number];
 
+/** Customer-facing labels (nav, filters, footer, category cards). */
 export const CATEGORY_LABELS: Record<CategorySlug, string> = {
   shampoo: "Shampoo",
-  facewash: "Facewash",
+  facewash: "Face wash",
   facialcare: "Facial care",
   serums: "Serums",
-  bodycare: "Bodycare",
-  haircare: "Haircare",
+  bodycare: "Body care",
+  haircare: "Hair care",
 };

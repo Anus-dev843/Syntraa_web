@@ -107,9 +107,16 @@ async function writeAdminStoreMongo(store: AdminStore): Promise<void> {
 
 export async function readAdminStore(): Promise<AdminStore> {
   if (isMongoConfigured()) {
-    const conn = await connectDB();
-    if (conn) {
-      return readAdminStoreMongo();
+    try {
+      const conn = await connectDB();
+      if (conn) {
+        return await readAdminStoreMongo();
+      }
+    } catch (e) {
+      console.error(
+        "[admin-json] Mongo CMS read failed — using file store.",
+        e instanceof Error ? e.message : e,
+      );
     }
   }
   return readAdminStoreFromFile();

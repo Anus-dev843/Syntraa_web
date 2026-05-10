@@ -1,7 +1,7 @@
 import "server-only";
 
 import { ProductModel } from "@/lib/models/Product";
-import { connectDB } from "@/lib/mongodb";
+import { connectDB, peekLastMongoConnectionError } from "@/lib/mongodb";
 import { getMongoDbName } from "@/lib/mongo-db-name";
 import { isMongoConfigured } from "@/lib/mongo-uri";
 
@@ -45,12 +45,16 @@ export async function getMongoHealthPayload(): Promise<MongoHealthPayload> {
   try {
     const mongoose = await connectDB();
     if (!mongoose) {
+      const err = peekLastMongoConnectionError();
       return {
         mongoConfigured: true,
         connected: false,
         database,
         productCount: null,
-        hint: "URI resolved but mongoose did not connect (unexpected — check logs).",
+        hint:
+          err ??
+          "URI resolved but mongoose did not connect — check Atlas Network Access, credentials, and logs.",
+        error: err,
       };
     }
     const productCount = await ProductModel.countDocuments();

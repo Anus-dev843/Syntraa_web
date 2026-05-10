@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { revalidatePath } from "next/cache";
 
 import { CATEGORY_SLUGS } from "@/lib/constants";
-import { hasValidAdminSession } from "@/lib/admin-auth";
+import { hasValidAdminSession } from "@/lib/admin-session";
 import {
   readAdminStore,
   validateAdminStore,

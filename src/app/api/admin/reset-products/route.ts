@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { PRODUCTS } from "../../../../../data/products";
-import { hasValidAdminSession } from "../../../../lib/admin-auth";
+import { hasValidAdminSession } from "../../../../lib/admin-session";
 import { isMongoConfigured } from "../../../../lib/mongodb";
 import { revalidateCatalogPaths } from "../../../../lib/revalidate-catalog";
 import { seedProductsFromSeedFile } from "../../../../lib/product-service";

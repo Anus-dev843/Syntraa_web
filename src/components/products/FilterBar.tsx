@@ -1,7 +1,7 @@
 "use client";
 
 import type { SortMode } from "./ProductsExplorer";
-import { CATEGORY_SLUGS } from "@/lib/constants";
+import { CATEGORY_LABELS, CATEGORY_SLUGS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 type FilterBarProps = {
@@ -21,10 +21,7 @@ export function FilterBar({
 }: FilterBarProps) {
   const categories = CATEGORY_SLUGS.map((slug) => ({
     slug,
-    label:
-      slug === "facewash"
-        ? "Face wash"
-        : slug.charAt(0).toUpperCase() + slug.slice(1),
+    label: CATEGORY_LABELS[slug],
   }));
 
   return (

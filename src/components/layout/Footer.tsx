@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATEGORY_SLUGS } from "@/lib/constants";
+import { CATEGORY_LABELS, CATEGORY_SLUGS } from "@/lib/constants";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 
 export function Footer() {
@@ -82,9 +82,7 @@ export function Footer() {
                       href={`/category/${slug}`}
                       className="transition-colors duration-300 hover:text-luxury-snow"
                     >
-                      {slug === "facewash"
-                        ? "Facewash"
-                        : slug.charAt(0).toUpperCase() + slug.slice(1)}
+                      {CATEGORY_LABELS[slug]}
                     </Link>
                   </li>
                 ))}

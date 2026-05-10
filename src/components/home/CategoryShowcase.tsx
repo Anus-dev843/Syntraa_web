@@ -29,17 +29,17 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
             Categories
           </p>
           <h2 className="mt-6 font-display text-4xl text-luxury-snow md:text-[3.65rem]">
-            Five lines of ritual.
+            Six ritual lanes.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-luxury-muted md:text-xl">
-            Facewash, Facial Care, Hair Care, Bodywash, and Serums — each
-            capsule composed in monochrome calm. Hover to reveal depth.
+            Shampoo, face wash, facial care, serums, body care, and hair care —
+            each capsule composed in monochrome calm. Hover to reveal depth.
           </p>
         </AnimatedSection>
 
         <MotionStagger
           variant="category"
-          className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8 xl:grid-cols-5"
+          className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8 xl:grid-cols-3 2xl:grid-cols-6"
         >
           {ordered.map((cat, index) => (
             <CategoryCard

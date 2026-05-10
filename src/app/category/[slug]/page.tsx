@@ -66,15 +66,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <h1 className="mt-4 font-display text-4xl tracking-tight text-luxury-snow md:text-6xl">
             {category.title}
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-luxury-muted md:text-xl">
-            A focused edit of formulas tailored to this ritual lane.
+          <p className="mt-5 text-lg leading-relaxed text-luxury-snow/95 md:text-xl">
+            {category.description}
+          </p>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-luxury-muted md:text-lg">
+            {category.subtitle}
           </p>
         </AnimatedSection>
-        <CategoryProductGrid
-          slug={slug}
-          seedProducts={seedProducts}
-          category={category}
-        />
+        <CategoryProductGrid slug={slug} seedProducts={seedProducts} />
       </div>
     </div>
   );

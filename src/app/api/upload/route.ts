@@ -2,7 +2,7 @@ import { Readable } from "node:stream";
 
 import { NextResponse, type NextRequest } from "next/server";
 
-import { hasValidAdminSession } from "@/lib/admin-auth";
+import { hasValidAdminSession } from "@/lib/admin-session";
 import { cloudinary, isCloudinaryConfigured } from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
