@@ -3,6 +3,58 @@ import "server-only";
 import bcrypt from "bcryptjs";
 import { timingSafeEqual } from "node:crypto";
 
+/** Strip BOM, whitespace, accidental wrapping quotes (common when pasting into Render UI). */
+function cleanEnvLoose(value: string | undefined): string | undefined {
+  if (value == null) return undefined;
+  let s = String(value).replace(/\ufeff/g, "").trim();
+  if (!s) return undefined;
+  if (
+    (s.startsWith('"') && s.endsWith('"')) ||
+    (s.startsWith("'") && s.endsWith("'"))
+  ) {
+    s = s.slice(1, -1).trim();
+  }
+  return s || undefined;
+}
+
+/** Base64 payloads: collapse internal whitespace (line breaks after copy-paste). */
+function normalizeBase64Candidate(value: string | undefined): string | undefined {
+  const s = cleanEnvLoose(value);
+  if (!s) return undefined;
+  return s.replace(/\s+/g, "");
+}
+
+function decodeBcryptFromBase64Variants(b64Raw: string | undefined): string | undefined {
+  const compact = normalizeBase64Candidate(b64Raw);
+  if (!compact) return undefined;
+  try {
+    // Standard base64 (+ /)
+    let decoded = Buffer.from(compact, "base64").toString("utf8").trim();
+    if (
+      decoded.startsWith("$2a$") ||
+      decoded.startsWith("$2b$") ||
+      decoded.startsWith("$2y$")
+    ) {
+      return decoded;
+    }
+    // URL-safe base64 fallback
+    const urlNorm = compact.replace(/-/g, "+").replace(/_/g, "/");
+    const padLen = urlNorm.length % 4;
+    const padded = padLen ? urlNorm + "=".repeat(4 - padLen) : urlNorm;
+    decoded = Buffer.from(padded, "base64").toString("utf8").trim();
+    if (
+      decoded.startsWith("$2a$") ||
+      decoded.startsWith("$2b$") ||
+      decoded.startsWith("$2y$")
+    ) {
+      return decoded;
+    }
+  } catch {
+    /* ignore */
+  }
+  return undefined;
+}
+
 function getExpectedEmail(): string {
   const raw = (process.env.ADMIN_EMAIL ?? "admin@syntraa.com").trim().toLowerCase();
   /** Empty env var `ADMIN_EMAIL=` would otherwise reject every login. */
@@ -20,24 +72,15 @@ export function getConfiguredAdminLoginEmail(): string {
  * instead: UTF-8 bcrypt string → base64 (no `$` in the env value).
  */
 export function resolveAdminPasswordHash(): string | undefined {
-  /** Prefer BASE64 on hosts (Render) that corrupt `$…` inside `ADMIN_PASSWORD_HASH`. */
-  const b64 = process.env.ADMIN_PASSWORD_HASH_BASE64?.trim();
-  if (b64) {
-    try {
-      const decoded = Buffer.from(b64, "base64").toString("utf8").trim();
-      if (
-        decoded.startsWith("$2a$") ||
-        decoded.startsWith("$2b$") ||
-        decoded.startsWith("$2y$")
-      ) {
-        return decoded;
-      }
-    } catch {
-      /* ignore */
-    }
+  /** Prefer BASE64 — Render Dashboard often destroys `$…` bcrypt strings in `ADMIN_PASSWORD_HASH`. */
+  const fromEnvB64 =
+    decodeBcryptFromBase64Variants(process.env.ADMIN_PASSWORD_HASH_BASE64) ??
+    decodeBcryptFromBase64Variants(process.env.ADMIN_PASSWORD_BCRYPT_BASE64);
+  if (fromEnvB64) {
+    return fromEnvB64;
   }
 
-  const direct = process.env.ADMIN_PASSWORD_HASH?.trim();
+  const direct = cleanEnvLoose(process.env.ADMIN_PASSWORD_HASH);
   if (
     direct &&
     (direct.startsWith("$2a$") ||
@@ -56,7 +99,25 @@ export function isAdminPasswordConfigured(): boolean {
 }
 
 export function isAdminSessionSecretConfigured(): boolean {
-  return Boolean(process.env.ADMIN_SESSION_SECRET?.trim());
+  return Boolean(cleanEnvLoose(process.env.ADMIN_SESSION_SECRET));
+}
+
+/** For `/api/health?admin=1` — no secrets leaked. */
+export function getAdminPasswordEnvDiagnostics(): {
+  base64KeySet: boolean;
+  alternateBase64KeySet: boolean;
+  rawHashKeySet: boolean;
+  base64DecodedOk: boolean;
+} {
+  const decoded =
+    decodeBcryptFromBase64Variants(process.env.ADMIN_PASSWORD_HASH_BASE64) ??
+    decodeBcryptFromBase64Variants(process.env.ADMIN_PASSWORD_BCRYPT_BASE64);
+  return {
+    base64KeySet: Boolean(process.env.ADMIN_PASSWORD_HASH_BASE64?.trim()),
+    alternateBase64KeySet: Boolean(process.env.ADMIN_PASSWORD_BCRYPT_BASE64?.trim()),
+    rawHashKeySet: Boolean(process.env.ADMIN_PASSWORD_HASH?.trim()),
+    base64DecodedOk: Boolean(decoded),
+  };
 }
 
 function timingSafeStringEqual(a: string, b: string): boolean {

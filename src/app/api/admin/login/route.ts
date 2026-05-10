@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 import {
   isAdminPasswordConfigured,
   verifyAdminCredentials,
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Admin login is not configured. Set ADMIN_PASSWORD_HASH_BASE64 or ADMIN_PASSWORD_HASH on the server (see .env.example — Render often breaks hashes that contain `$`).",
+            "Admin bcrypt hash missing on server. Render → Environment: add ADMIN_PASSWORD_HASH_BASE64 = one-line value from `.env.example` (no wrapping quotes). Save, then Deploy. Troubleshoot: GET /api/health?admin=1",
         },
         { status: 503 },
       );

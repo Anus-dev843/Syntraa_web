@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import {
+  getAdminPasswordEnvDiagnostics,
   getConfiguredAdminLoginEmail,
   isAdminPasswordConfigured,
   isAdminSessionSecretConfigured,
@@ -21,12 +22,14 @@ export async function GET(request: NextRequest) {
 
   if (sp.get("admin") === "1") {
     const prod = process.env.NODE_ENV === "production";
+    const diag = getAdminPasswordEnvDiagnostics();
     const hashLen = resolveAdminPasswordHash()?.length ?? 0;
     return NextResponse.json(
       {
         ok: true,
         production: prod,
         loginEmailMustMatch: getConfiguredAdminLoginEmail(),
+        envDiagnostics: diag,
         passwordHashResolved: Boolean(hashLen > 40),
         sessionSecretSet: isAdminSessionSecretConfigured(),
         hints: prod
@@ -34,7 +37,7 @@ export async function GET(request: NextRequest) {
               ...(isAdminPasswordConfigured()
                 ? []
                 : [
-                    "Set ADMIN_PASSWORD_HASH_BASE64 (recommended on Render) or ADMIN_PASSWORD_HASH — see .env.example",
+                    'Render → Environment: Key = ADMIN_PASSWORD_HASH_BASE64, Value = one line from .env.example (no "quotes"). Deploy after Save.',
                   ]),
               ...(isAdminSessionSecretConfigured()
                 ? []
