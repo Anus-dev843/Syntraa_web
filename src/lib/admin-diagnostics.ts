@@ -1,6 +1,11 @@
 import "server-only";
 
 import type { AdminDiagnosticsPayload, DiagnosticCheck, DiagnosticStatus } from "@/lib/admin-diagnostics-types";
+import {
+  getConfiguredAdminLoginEmail,
+  isAdminPasswordConfigured,
+  isAdminSessionSecretConfigured,
+} from "@/lib/admin-credentials";
 import { getCloudinaryCloudName, isCloudinaryConfigured } from "@/lib/cloudinary";
 import { getMongoHealthPayload } from "@/lib/mongo-health-status";
 
@@ -9,15 +14,14 @@ export type { AdminDiagnosticsPayload, DiagnosticCheck, DiagnosticStatus } from 
 function adminAuthCheck(): DiagnosticCheck {
   const prod = process.env.NODE_ENV === "production";
   if (!prod) {
-    const hasHash = Boolean(process.env.ADMIN_PASSWORD_HASH?.trim());
     const hasPlain = Boolean(process.env.ADMIN_PASSWORD?.trim());
-    if (!hasHash && !hasPlain) {
+    if (!isAdminPasswordConfigured() && !hasPlain) {
       return {
         id: "admin_auth",
         status: "warn",
         title: "Admin login (development)",
         detail:
-          "Set ADMIN_PASSWORD or ADMIN_PASSWORD_HASH in .env.local so you can sign in.",
+          "Set ADMIN_PASSWORD, ADMIN_PASSWORD_HASH, or ADMIN_PASSWORD_HASH_BASE64 in .env.local.",
       };
     }
     return {
@@ -28,29 +32,29 @@ function adminAuthCheck(): DiagnosticCheck {
     };
   }
 
-  const hasHash = Boolean(process.env.ADMIN_PASSWORD_HASH?.trim());
-  const hasSecret = Boolean(process.env.ADMIN_SESSION_SECRET?.trim());
-  if (!hasHash) {
+  if (!isAdminPasswordConfigured()) {
     return {
       id: "admin_auth",
       status: "bad",
       title: "Admin password (production)",
-      detail: "Set ADMIN_PASSWORD_HASH on Render (run npm run admin:hash-password locally).",
+      detail:
+        "Set ADMIN_PASSWORD_HASH_BASE64 (recommended on Render) or ADMIN_PASSWORD_HASH — see .env.example. Run: npm run admin:hash-password -- \"YourPassword\"",
     };
   }
-  if (!hasSecret) {
+  if (!isAdminSessionSecretConfigured()) {
     return {
       id: "admin_auth",
       status: "bad",
       title: "Admin session (production)",
-      detail: "Set ADMIN_SESSION_SECRET on Render (same script prints a value).",
+      detail:
+        "Set ADMIN_SESSION_SECRET (64 hex chars). Generate: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
     };
   }
   return {
     id: "admin_auth",
     status: "good",
     title: "Admin auth (production)",
-    detail: "ADMIN_PASSWORD_HASH and ADMIN_SESSION_SECRET are set.",
+    detail: `ADMIN_PASSWORD_HASH (or BASE64) + ADMIN_SESSION_SECRET are set (login email: ${getConfiguredAdminLoginEmail()}).`,
   };
 }
 
@@ -86,6 +90,7 @@ export async function getAdminDiagnosticsPayload(): Promise<AdminDiagnosticsPayl
     });
   }
 
+  /** Shop can use `/mockups/` and static URLs without Cloudinary — warn only, not deployment blocker. */
   const cloudOk = isCloudinaryConfigured();
   checks.push(
     cloudOk
@@ -97,10 +102,10 @@ export async function getAdminDiagnosticsPayload(): Promise<AdminDiagnosticsPayl
         }
       : {
           id: "cloudinary",
-          status: "bad",
-          title: "Cloudinary",
+          status: "warn",
+          title: "Cloudinary (optional for catalogue)",
           detail:
-            "Missing CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET (or CLOUDINARY_URL). Image uploads will fail until set on Render.",
+            "Not set — admin image uploads to Cloudinary will fail; product images can still use `/mockups/…` HTTPS or paths. Add CLOUDINARY_* on Render when you need uploads.",
         },
   );
 
@@ -131,7 +136,7 @@ export async function getAdminDiagnosticsPayload(): Promise<AdminDiagnosticsPayl
     "Atlas → Network Access: 0.0.0.0/0 for cloud hosting (or specific egress).",
     "Atlas → Database Access: user password matches Render; rotate if unsure.",
     "CLOUDINARY_* three vars or CLOUDINARY_URL.",
-    "Production: ADMIN_PASSWORD_HASH + ADMIN_SESSION_SECRET.",
+    "Production: ADMIN_PASSWORD_HASH_BASE64 (or ADMIN_PASSWORD_HASH) + ADMIN_SESSION_SECRET.",
     "After env changes: Manual Deploy so the service restarts with new variables.",
   ];
 

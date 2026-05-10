@@ -37,11 +37,14 @@ export function AdminImportSeedProducts({ mongoConfigured }: Props) {
         setError(data.error ?? `Request failed (${res.status}).`);
         return;
       }
-      setDoneMsg(
-        typeof data.inserted === "number"
-          ? `Imported ${data.inserted} products from the seed file.`
-          : "Catalogue updated from the seed file.",
-      );
+      const n = data.inserted ?? 0;
+      if (n === 0) {
+        setError(
+          "No products were inserted. If this repeats, MongoDB did not accept writes — check Render logs and Atlas connection.",
+        );
+        return;
+      }
+      setDoneMsg(`Imported ${n} products from the seed file.`);
       router.refresh();
     } catch {
       setError("Network error — try again.");

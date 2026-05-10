@@ -21,7 +21,17 @@ export async function POST(request: NextRequest) {
     );
   }
   try {
-    const { inserted } = await seedProductsFromSeedFile(PRODUCTS as Product[]);
+    const { inserted, mongoConnected } = await seedProductsFromSeedFile(PRODUCTS as Product[]);
+    if (!mongoConnected) {
+      return NextResponse.json(
+        {
+          error:
+            "Could not connect to MongoDB. Confirm MONGODB_URI on Render, Atlas Network Access (0.0.0.0/0), and correct database user password — then redeploy.",
+          inserted: 0,
+        },
+        { status: 503 },
+      );
+    }
     revalidateCatalogPaths();
     return NextResponse.json({ ok: true, inserted });
   } catch {

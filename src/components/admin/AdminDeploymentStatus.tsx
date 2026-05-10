@@ -47,9 +47,10 @@ export function AdminDeploymentStatus({ variant }: Props) {
     };
   }, []);
 
-  if (variant === "banner") {
+    if (variant === "banner") {
     if (error || !data) return null;
-    if (data.overall === "good") return null;
+    /** Only block the dashboard with red banner for hard failures (Mongo/auth). Warnings stay in Settings. */
+    if (data.overall !== "bad") return null;
     return (
       <div
         className={`mb-6 rounded-2xl border px-4 py-3 text-sm leading-relaxed ${badgeClasses(data.overall)}`}
@@ -57,11 +58,11 @@ export function AdminDeploymentStatus({ variant }: Props) {
       >
         <p className="font-medium">{data.overallLabel}</p>
         <p className="mt-1 text-xs opacity-90">
-          Fix MongoDB, Cloudinary, or admin env on Render — see{" "}
+          Fix MongoDB connection or admin secrets on Render — see{" "}
           <Link href="/admin/settings" className="underline underline-offset-2 hover:opacity-100">
             Settings → deployment checks
-          </Link>
-          .
+          </Link>{" "}
+          (Cloudinary is optional if you use `/mockups` URLs).
         </p>
       </div>
     );

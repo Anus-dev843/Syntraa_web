@@ -191,9 +191,9 @@ export async function deleteProduct(id: string): Promise<boolean> {
 
 export async function seedProductsFromSeedFile(
   products: Product[],
-): Promise<{ inserted: number }> {
+): Promise<{ inserted: number; mongoConnected: boolean }> {
   if (!(await connectDB())) {
-    return { inserted: 0 };
+    return { inserted: 0, mongoConnected: false };
   }
   await ProductModel.deleteMany({});
   let inserted = 0;
@@ -216,5 +216,5 @@ export async function seedProductsFromSeedFile(
     });
     inserted += 1;
   }
-  return { inserted };
+  return { inserted, mongoConnected: true };
 }
