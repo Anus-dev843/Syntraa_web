@@ -1,5 +1,6 @@
 import { AdminDashboardHome } from "@/components/admin/AdminDashboardHome";
 import { readAdminStore } from "@/lib/admin-json";
+import { isMongoConfigured } from "@/lib/mongo-uri";
 import { countProducts } from "@/lib/product-service";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +18,7 @@ export default async function AdminDashboardRoutePage() {
       pageCount={store.pages.length}
       productTotal={counts.total}
       featuredTotal={counts.featured}
+      mongoConfigured={isMongoConfigured()}
     />
   );
 }

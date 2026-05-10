@@ -14,7 +14,7 @@ function unauthorized() {
 }
 
 export async function GET(request: NextRequest) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return unauthorized();
   }
   try {
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return unauthorized();
   }
   try {
@@ -41,6 +41,9 @@ export async function PUT(request: NextRequest) {
     await writeAdminStore(result.store);
     revalidatePath("/");
     revalidatePath("/products");
+    for (const page of result.store.pages) {
+      revalidatePath(`/p/${page.slug}`);
+    }
     for (const slug of CATEGORY_SLUGS) {
       revalidatePath(`/category/${slug}`);
     }

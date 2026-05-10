@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
 import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
+import { formatMongoDriverError } from "@/lib/mongo-api-error";
 import { isMongoConfigured } from "@/lib/mongodb";
 import {
   MAX_GALLERY_EXTRAS,
@@ -36,13 +37,13 @@ export async function GET(_request: NextRequest, context: Ctx) {
     }
     return NextResponse.json(product);
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Server error.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { message, status } = formatMongoDriverError(e);
+    return NextResponse.json({ error: message }, { status });
   }
 }
 
 export async function PUT(request: NextRequest, context: Ctx) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return unauthorized();
   }
   try {
@@ -135,13 +136,13 @@ export async function PUT(request: NextRequest, context: Ctx) {
     revalidateCatalogPaths(id);
     return NextResponse.json(product);
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Server error.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { message, status } = formatMongoDriverError(e);
+    return NextResponse.json({ error: message }, { status });
   }
 }
 
 export async function DELETE(request: NextRequest, context: Ctx) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return unauthorized();
   }
   try {
@@ -156,7 +157,7 @@ export async function DELETE(request: NextRequest, context: Ctx) {
     revalidateCatalogPaths(id);
     return NextResponse.json({ ok: true });
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Server error.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { message, status } = formatMongoDriverError(e);
+    return NextResponse.json({ error: message }, { status });
   }
 }

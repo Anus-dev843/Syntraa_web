@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { AdminShell } from "../../../components/admin/AdminShell";
-import { ADMIN_SESSION_COOKIE, isValidAdminSessionValue } from "../../../lib/admin-auth";
+import { ADMIN_SESSION_COOKIE, verifyAdminSessionToken } from "../../../lib/admin-auth";
 
 export default async function AdminDashboardLayout({
   children,
@@ -11,7 +11,7 @@ export default async function AdminDashboardLayout({
 }) {
   const cookieStore = await cookies();
   const sessionValue = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
-  if (!isValidAdminSessionValue(sessionValue)) {
+  if (!(await verifyAdminSessionToken(sessionValue))) {
     redirect("/admin/login");
   }
 

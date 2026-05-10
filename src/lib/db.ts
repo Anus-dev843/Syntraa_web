@@ -2,9 +2,9 @@ import "server-only";
 
 import { type Collection, type Db, MongoClient } from "mongodb";
 
+import { getMongoConnectionConfig } from "./mongo-connect-config";
 import { getMongoDbName } from "./mongo-db-name";
-import { getMongoDriverOptions } from "./mongo-driver-options";
-import { resolveMongoUri } from "./mongo-uri";
+import { resolveMongoConnectionString } from "./mongo-uri";
 
 export const USERS_COLLECTION_NAME = "users" as const;
 
@@ -18,7 +18,7 @@ declare global {
 }
 
 function requireMongoUri(): string {
-  const uri = resolveMongoUri();
+  const uri = resolveMongoConnectionString();
   if (!uri) {
     throw new Error(
       "MongoDB URI is not set. Define MONGODB_URI or DATABASE_URL in the environment (e.g. .env.local).",
@@ -37,7 +37,8 @@ export function getMongoClientPromise(): Promise<MongoClient> {
     return global.syntraaMongoClientPromise;
   }
   const uri = requireMongoUri();
-  const client = new MongoClient(uri, getMongoDriverOptions());
+  const { uri: connectUri, mongoClientOptions } = getMongoConnectionConfig(uri);
+  const client = new MongoClient(connectUri, mongoClientOptions);
   global.syntraaMongoClientPromise = client.connect().then((connected) => {
     console.log(`[Syntraa MongoDB native] Connected (database "${getMongoDbName()}")`);
     return connected;

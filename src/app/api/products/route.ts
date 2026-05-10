@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { hasValidAdminSession } from "@/lib/admin-auth";
 import { isAllowedCatalogImageUrl } from "@/lib/catalog-image-url";
+import { formatMongoDriverError } from "@/lib/mongo-api-error";
 import { isMongoConfigured } from "@/lib/mongodb";
 import {
   MAX_GALLERY_EXTRAS,
@@ -49,13 +50,13 @@ export async function GET() {
     const products = await listProducts();
     return NextResponse.json(products);
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Server error.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { message, status } = formatMongoDriverError(e);
+    return NextResponse.json({ error: message }, { status });
   }
 }
 
 export async function POST(request: NextRequest) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return unauthorized();
   }
   try {
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
     revalidateCatalogPaths(product.id);
     return NextResponse.json(product, { status: 201 });
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Server error.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { message, status } = formatMongoDriverError(e);
+    return NextResponse.json({ error: message }, { status });
   }
 }

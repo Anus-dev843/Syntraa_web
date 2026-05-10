@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 
 import {
   ADMIN_SESSION_COOKIE,
-  credentialsAreValid,
-  sessionCookieValue,
-} from "../../../../lib/admin-auth";
+  createAdminSessionToken,
+  verifyAdminCredentials,
+} from "@/lib/admin-auth";
 
 type LoginPayload = {
   email?: string;
@@ -13,21 +13,45 @@ type LoginPayload = {
 
 export async function POST(request: Request) {
   try {
+    if (
+      process.env.NODE_ENV === "production" &&
+      !process.env.ADMIN_PASSWORD_HASH?.trim()
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Admin login is not configured. Set ADMIN_PASSWORD_HASH on the server (see .env.example).",
+        },
+        { status: 503 },
+      );
+    }
+
     const body = (await request.json()) as LoginPayload;
     const email = body.email ?? "";
     const password = body.password ?? "";
 
-    if (!credentialsAreValid(email, password)) {
+    if (!(await verifyAdminCredentials(email, password))) {
       return NextResponse.json(
         { error: "Invalid email or password." },
         { status: 401 },
       );
     }
 
+    const token = await createAdminSessionToken();
+    if (!token) {
+      return NextResponse.json(
+        {
+          error:
+            "Admin session is not configured. Set ADMIN_SESSION_SECRET in production (see .env.example).",
+        },
+        { status: 503 },
+      );
+    }
+
     const response = NextResponse.json({ ok: true });
     response.cookies.set({
       name: ADMIN_SESSION_COOKIE,
-      value: sessionCookieValue(),
+      value: token,
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",

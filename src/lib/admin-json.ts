@@ -3,6 +3,8 @@ import "server-only";
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { connectDB, isMongoConfigured } from "./mongodb";
+import { ADMIN_CMS_DOC_ID, AdminCmsModel } from "./models/AdminCms";
 import type { AdminStore, CustomPage } from "./types";
 
 const STORE_REL = ["src", "data", "admin-store.json"] as const;
@@ -39,7 +41,7 @@ export function isValidPageSlug(slug: string): boolean {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
 }
 
-export async function readAdminStore(): Promise<AdminStore> {
+async function readAdminStoreFromFile(): Promise<AdminStore> {
   const file = storePath();
   try {
     const raw = await fs.readFile(file, "utf-8");
@@ -47,7 +49,7 @@ export async function readAdminStore(): Promise<AdminStore> {
     const pages = Array.isArray(parsed.pages) ? (parsed.pages as CustomPage[]) : [];
     const store: AdminStore = { pages };
     if (Array.isArray(parsed.products)) {
-      await writeAdminStore(store);
+      await writeAdminStoreToFile(store);
     }
     return store;
   } catch {
@@ -58,10 +60,70 @@ export async function readAdminStore(): Promise<AdminStore> {
   }
 }
 
-export async function writeAdminStore(store: AdminStore): Promise<void> {
+async function writeAdminStoreToFile(store: AdminStore): Promise<void> {
   const file = storePath();
   await fs.mkdir(path.dirname(file), { recursive: true });
   await fs.writeFile(file, JSON.stringify(store, null, 2), "utf-8");
+}
+
+async function tryReadStoreFromFileOnly(): Promise<AdminStore | null> {
+  const file = storePath();
+  try {
+    const raw = await fs.readFile(file, "utf-8");
+    const parsed = JSON.parse(raw) as AdminStore & { products?: unknown };
+    const pages = Array.isArray(parsed.pages) ? (parsed.pages as CustomPage[]) : [];
+    return { pages };
+  } catch {
+    return null;
+  }
+}
+
+async function readAdminStoreMongo(): Promise<AdminStore> {
+  const existing = await AdminCmsModel.findById(ADMIN_CMS_DOC_ID).lean();
+  if (existing?.pages?.length) {
+    return { pages: existing.pages as CustomPage[] };
+  }
+
+  const fromDisk = await tryReadStoreFromFileOnly();
+  if (fromDisk?.pages?.length) {
+    await AdminCmsModel.updateOne(
+      { _id: ADMIN_CMS_DOC_ID },
+      { $set: { pages: fromDisk.pages } },
+      { upsert: true },
+    );
+    return fromDisk;
+  }
+
+  return { pages: [] };
+}
+
+async function writeAdminStoreMongo(store: AdminStore): Promise<void> {
+  await AdminCmsModel.updateOne(
+    { _id: ADMIN_CMS_DOC_ID },
+    { $set: { pages: store.pages } },
+    { upsert: true },
+  );
+}
+
+export async function readAdminStore(): Promise<AdminStore> {
+  if (isMongoConfigured()) {
+    const conn = await connectDB();
+    if (conn) {
+      return readAdminStoreMongo();
+    }
+  }
+  return readAdminStoreFromFile();
+}
+
+export async function writeAdminStore(store: AdminStore): Promise<void> {
+  if (isMongoConfigured()) {
+    const conn = await connectDB();
+    if (conn) {
+      await writeAdminStoreMongo(store);
+      return;
+    }
+  }
+  await writeAdminStoreToFile(store);
 }
 
 export function validateAdminStore(body: unknown): { ok: true; store: AdminStore } | { ok: false; message: string } {

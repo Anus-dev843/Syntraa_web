@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 export function AdminLoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@syntraa.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -17,6 +17,7 @@ export function AdminLoginForm() {
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
@@ -54,6 +55,8 @@ export function AdminLoginForm() {
           <input
             className="rounded-2xl border border-white/15 bg-black/35 px-4 py-3 text-sm text-luxury-snow"
             type="email"
+            autoComplete="username"
+            placeholder="admin@syntraa.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
@@ -65,6 +68,7 @@ export function AdminLoginForm() {
           <input
             className="rounded-2xl border border-white/15 bg-black/35 px-4 py-3 text-sm text-luxury-snow"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required

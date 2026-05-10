@@ -50,9 +50,12 @@ function parseCloudinaryUrl(raw: string | undefined): {
 
 function readCredentials() {
   const fromUrl = parseCloudinaryUrl(process.env.CLOUDINARY_URL);
+  const rawKey = process.env.CLOUDINARY_API_KEY?.trim();
+  /** Paste typo `-1234567` — Cloudinary API keys are never negative. */
+  const api_key = rawKey && /^-\d+$/.test(rawKey) ? rawKey.slice(1) : rawKey;
   const explicit = {
     cloud_name: normalizeCloudName(process.env.CLOUDINARY_CLOUD_NAME),
-    api_key: process.env.CLOUDINARY_API_KEY?.trim(),
+    api_key,
     api_secret: process.env.CLOUDINARY_API_SECRET?.trim(),
   };
 

@@ -66,13 +66,26 @@ export async function getMongoHealthPayload(): Promise<MongoHealthPayload> {
     };
   } catch (e) {
     const message = e instanceof Error ? e.message : "unknown error";
+    const authFailed =
+      /bad auth|authentication failed/i.test(message) ||
+      (typeof e === "object" &&
+        e !== null &&
+        "codeName" in e &&
+        (e as { codeName?: string }).codeName === "AtlasError");
+
+    let hint =
+      "Connection failed — check Atlas Network Access (allow 0.0.0.0/0 during setup), URI user/password, and that the cluster matches this deploy.";
+    if (authFailed) {
+      hint =
+        "Atlas rejected database credentials. Fix: (1) Atlas → Database Access → reset password → Connect → copy URI. (2) Put host-only URI in MONGODB_URI and set MONGODB_USER + MONGODB_PASSWORD separately on Render (password is URL-encoded automatically — avoids broken `$` in passwords and paste mistakes). Optional: MONGODB_PASSWORD_BASE64 if your host mangles secrets. (3) No extra quotes around env values; redeploy after saving.";
+    }
+
     return {
       mongoConfigured: true,
       connected: false,
       database,
       productCount: null,
-      hint:
-        "Connection failed — check Atlas Network Access (allow 0.0.0.0/0 during setup), URI user/password, and that the cluster matches this deploy.",
+      hint,
       error: message,
     };
   }

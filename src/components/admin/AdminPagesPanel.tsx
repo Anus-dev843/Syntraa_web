@@ -51,6 +51,7 @@ export function AdminPagesPanel({ initialStore }: AdminPagesPanelProps) {
     setError(null);
     const res = await fetch("/api/admin/store", {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(next),
     });

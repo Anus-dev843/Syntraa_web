@@ -22,7 +22,7 @@ export function AdminProductsManager({ initialProducts }: AdminProductsManagerPr
   );
 
   async function refreshList() {
-    const res = await fetch("/api/products");
+    const res = await fetch("/api/products", { credentials: "include" });
     if (!res.ok) return;
     const next = (await res.json()) as Product[];
     setProducts(next);
@@ -33,7 +33,10 @@ export function AdminProductsManager({ initialProducts }: AdminProductsManagerPr
     setBusyId(id);
     setError(null);
     try {
-      const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
         setError(data.error ?? "Delete failed.");

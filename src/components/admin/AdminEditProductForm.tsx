@@ -3,13 +3,19 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { CATEGORY_SLUGS, type CategorySlug } from "../../lib/constants";
+import {
+  CATEGORY_LABELS,
+  CATEGORY_SLUGS,
+  type CategorySlug,
+} from "../../lib/constants";
 import type { Product } from "../../lib/types";
 
 const MAX_EXTRA_IMAGES = 7;
 
 type Props = {
   product: Product;
+  mongoConfigured: boolean;
+  cloudConfigured: boolean;
 };
 
 async function uploadToCloudinary(file: File): Promise<{
@@ -18,7 +24,11 @@ async function uploadToCloudinary(file: File): Promise<{
 }> {
   const fd = new FormData();
   fd.set("file", file);
-  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    credentials: "include",
+    body: fd,
+  });
   const data = (await res.json().catch(() => ({}))) as {
     error?: string;
     secure_url?: string;
@@ -27,7 +37,7 @@ async function uploadToCloudinary(file: File): Promise<{
   return { url: data.secure_url };
 }
 
-export function AdminEditProductForm({ product }: Props) {
+export function AdminEditProductForm({ product, mongoConfigured, cloudConfigured }: Props) {
   const router = useRouter();
   const [draft, setDraft] = useState({
     name: product.name,
@@ -112,6 +122,7 @@ export function AdminEditProductForm({ product }: Props) {
     try {
       const res = await fetch(`/api/products/${product.id}`, {
         method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: draft.name,
@@ -146,6 +157,32 @@ export function AdminEditProductForm({ product }: Props) {
       <h2 className="mt-4 font-display text-4xl tracking-tight text-luxury-snow">
         Edit product
       </h2>
+
+      {!mongoConfigured ? (
+        <div
+          className="mt-6 rounded-2xl border border-amber-500/40 bg-amber-500/[0.08] px-5 py-4 text-sm text-amber-50/95"
+          role="alert"
+        >
+          <p className="font-medium text-amber-100">MongoDB is not configured.</p>
+          <p className="mt-2 text-amber-50/90">
+            Set <code className="font-mono text-xs">MONGODB_URI</code> on Render and redeploy — saving changes will fail
+            until the database connects.
+          </p>
+        </div>
+      ) : null}
+
+      {!cloudConfigured ? (
+        <div
+          className="mt-6 rounded-2xl border border-rose-500/35 bg-rose-500/[0.07] px-5 py-4 text-sm text-rose-50/95"
+          role="alert"
+        >
+          <p className="font-medium text-rose-100">Cloudinary is not configured.</p>
+          <p className="mt-2 text-rose-50/90">
+            Image uploads are disabled; paste <code className="font-mono text-xs">https://</code> URLs or fix{" "}
+            <code className="font-mono text-xs">CLOUDINARY_*</code> on Render.
+          </p>
+        </div>
+      ) : null}
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit}>
         <label className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.3em] text-luxury-muted">
@@ -192,7 +229,7 @@ export function AdminEditProductForm({ product }: Props) {
           >
             {CATEGORY_SLUGS.map((slug) => (
               <option key={slug} value={slug}>
-                {slug}
+                {CATEGORY_LABELS[slug]}
               </option>
             ))}
           </select>
@@ -203,11 +240,12 @@ export function AdminEditProductForm({ product }: Props) {
           <input
             type="file"
             accept="image/*"
-            disabled={coverBusy}
+            disabled={coverBusy || !cloudConfigured}
             className="text-sm text-luxury-muted file:mr-4 file:rounded-full file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-[11px] file:uppercase file:tracking-[0.2em] file:text-luxury-snow"
             onChange={(event) => {
               const file = event.target.files?.[0];
               if (file) void uploadCover(file);
+              event.currentTarget.value = "";
             }}
           />
         </label>
@@ -234,7 +272,9 @@ export function AdminEditProductForm({ product }: Props) {
             type="file"
             accept="image/*"
             multiple
-            disabled={extrasBusy || draft.images.length >= MAX_EXTRA_IMAGES}
+            disabled={
+              extrasBusy || draft.images.length >= MAX_EXTRA_IMAGES || !cloudConfigured
+            }
             className="text-sm text-luxury-muted file:mr-4 file:rounded-full file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-[11px] file:uppercase file:tracking-[0.2em] file:text-luxury-snow"
             onChange={(event) => {
               const list = Array.from(event.target.files ?? []);
@@ -284,7 +324,7 @@ export function AdminEditProductForm({ product }: Props) {
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"
-            disabled={anyBusy}
+            disabled={anyBusy || !mongoConfigured}
             className="rounded-full bg-luxury-snow px-9 py-3 text-[11px] uppercase tracking-[0.32em] text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy

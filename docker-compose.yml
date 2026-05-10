@@ -1,0 +1,14 @@
+# Local MongoDB for development — avoids Atlas until you are ready.
+#   npm run db:up
+#   npm run db:local-uri   → creates or updates .env.local
+# Restart `npm run dev` after the first env write.
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - syntraa-mongo-data:/data/db
+
+volumes:
+  syntraa-mongo-data:

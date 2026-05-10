@@ -1,15 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { revalidatePath } from "next/cache";
 
 import { PRODUCTS } from "../../../../../data/products";
-import { CATEGORY_SLUGS } from "../../../../lib/constants";
 import { hasValidAdminSession } from "../../../../lib/admin-auth";
 import { isMongoConfigured } from "../../../../lib/mongodb";
+import { revalidateCatalogPaths } from "../../../../lib/revalidate-catalog";
 import { seedProductsFromSeedFile } from "../../../../lib/product-service";
 import type { Product } from "../../../../lib/types";
 
 export async function POST(request: NextRequest) {
-  if (!hasValidAdminSession(request)) {
+  if (!(await hasValidAdminSession(request))) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   if (!isMongoConfigured()) {
@@ -22,13 +21,9 @@ export async function POST(request: NextRequest) {
     );
   }
   try {
-    await seedProductsFromSeedFile(PRODUCTS as Product[]);
-    revalidatePath("/");
-    revalidatePath("/products");
-    for (const slug of CATEGORY_SLUGS) {
-      revalidatePath(`/category/${slug}`);
-    }
-    return NextResponse.json({ ok: true });
+    const { inserted } = await seedProductsFromSeedFile(PRODUCTS as Product[]);
+    revalidateCatalogPaths();
+    return NextResponse.json({ ok: true, inserted });
   } catch {
     return NextResponse.json({ error: "Reset failed." }, { status: 500 });
   }

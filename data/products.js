@@ -228,4 +228,26 @@ export const PRODUCTS = [
     ],
     rating: 4.5,
   },
+  {
+    id: "prod-whitening-facial-kit",
+    name: "Whitening Facial Kit – Complete Skin Brightening Facial Set for Glowing, Smooth & Radiant Skin",
+    slug: "whitening-facial-kit-complete-skin-brightening-set",
+    category: "facialcare",
+    price: 12,
+    currency: "USD",
+    image: "/mockups/facials/img-015.jpeg",
+    images: ["/mockups/facials/img-013.jpeg", "/mockups/facials/img-012.jpeg"],
+    featured: false,
+    shortDescription:
+      "Salon-like glowing skin at home — cleanse, exfoliate, nourish, and brighten for a radiant glow.",
+    description:
+      "Get salon-like glowing skin at home with our Whitening Facial Kit. This complete skincare facial set deeply cleanses, exfoliates, nourishes, and brightens your skin for an instant radiant glow. Helps reduce dullness, tanning, dark spots, and uneven skin tone while leaving your skin soft, smooth, and refreshed. Suitable for all skin types.\n\nPopular searches: whitening facial kit, skin brightening facial kit, facial kit for glowing skin, salon facial kit, instant glow facial, skincare facial set.",
+    ingredients: [
+      "Pearl extract (marketing)",
+      "Vitamin C",
+      "Brightening botanical blend",
+      "Salon-style 5-step ritual",
+    ],
+    rating: 4.7,
+  },
 ];

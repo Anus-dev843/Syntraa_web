@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 
+import { AdminDeploymentStatus } from "./AdminDeploymentStatus";
 import { cn } from "../../lib/utils";
 
 const navItems = [
@@ -36,7 +37,9 @@ export function AdminShell({ children }: AdminShellProps) {
   }, [pathname]);
 
   async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" }).catch(() => {});
+    await fetch("/api/admin/logout", { method: "POST", credentials: "include" }).catch(
+      () => {},
+    );
     router.replace("/admin/login");
   }
 
@@ -133,7 +136,10 @@ export function AdminShell({ children }: AdminShellProps) {
             })}
           </nav>
 
-          <main className="flex-1 px-5 py-8 md:px-8 md:py-10">{children}</main>
+          <main className="flex-1 px-5 py-8 md:px-8 md:py-10">
+            <AdminDeploymentStatus variant="banner" />
+            {children}
+          </main>
         </div>
       </div>
     </div>

@@ -1,15 +1,19 @@
 import Link from "next/link";
 
+import { AdminImportSeedProducts } from "./AdminImportSeedProducts";
+
 type AdminDashboardHomeProps = {
   pageCount: number;
   productTotal: number;
   featuredTotal: number;
+  mongoConfigured: boolean;
 };
 
 export function AdminDashboardHome({
   pageCount,
   productTotal,
   featuredTotal,
+  mongoConfigured,
 }: AdminDashboardHomeProps) {
   const cards = [
     {
@@ -43,15 +47,22 @@ export function AdminDashboardHome({
           storefront synchronized from one secure dashboard.
         </p>
         {productTotal === 0 ? (
-          <p className="mt-6 rounded-2xl border border-amber-500/35 bg-amber-500/[0.07] px-5 py-4 text-sm leading-relaxed text-amber-100/95">
-            <span className="font-medium text-amber-50">MongoDB catalogue is empty.</span> Visitors
-            still see the demo stock from{" "}
-            <code className="rounded-md bg-black/40 px-1.5 py-0.5 font-mono text-xs text-luxury-snow">
-              data/products.js
-            </code>{" "}
-            plus <span className="font-mono text-xs text-luxury-snow">/mockups/</span> art until you
-            add products here — or Atlas fills from another pipeline.
-          </p>
+          <div className="mt-6 space-y-1 rounded-2xl border border-amber-500/35 bg-amber-500/[0.07] px-5 py-4 text-sm leading-relaxed text-amber-100/95">
+            <p>
+              <span className="font-medium text-amber-50">MongoDB catalogue is empty.</span> The
+              storefront still shows the demo list from{" "}
+              <code className="rounded-md bg-black/40 px-1.5 py-0.5 font-mono text-xs text-luxury-snow">
+                data/products.js
+              </code>{" "}
+              and <span className="font-mono text-xs text-luxury-snow">/mockups/</span> until Atlas
+              has products.
+            </p>
+            <p className="text-amber-100/80">
+              Use the button below to copy that seed file into MongoDB (replaces any existing
+              products), or add SKUs manually under Products.
+            </p>
+            <AdminImportSeedProducts mongoConfigured={mongoConfigured} />
+          </div>
         ) : null}
       </section>
 

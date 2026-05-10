@@ -66,15 +66,14 @@ export function CategoryProductGrid({
         </MotionStagger>
       ) : (
         <div className="rounded-3xl border border-white/14 px-8 py-16 text-center text-sm text-luxury-muted md:px-12">
-          The atelier vault for this choreography is replenishing shortly.
-          Wander the full{" "}
+          Nothing is listed in this category yet. Browse the full{" "}
           <Link
             href="/products"
             className="text-luxury-snow underline-offset-8 hover:underline"
           >
             shop
-          </Link>
-          .
+          </Link>{" "}
+          or check back soon.
         </div>
       )}
     </div>

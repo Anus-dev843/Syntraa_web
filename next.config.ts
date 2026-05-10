@@ -10,6 +10,10 @@ const allowedDevOrigins = (
 
 const nextConfig: NextConfig = {
   allowedDevOrigins,
+  /** Admin image uploads allow up to 12MB files + multipart overhead (default proxy buffer is 10MB). */
+  experimental: {
+    proxyClientMaxBodySize: "15mb",
+  },
   async redirects() {
     return [
       { source: "/about", destination: "/story", permanent: true },

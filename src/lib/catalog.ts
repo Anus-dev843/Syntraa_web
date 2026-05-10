@@ -24,17 +24,40 @@ function normalizedFallbackProducts(): Product[] {
   return cachedNormalizedSeed;
 }
 
+/**
+ * When Mongo already has rows, still surface seed items for any category that has no Mongo
+ * products yet (slug deduped). Fixes empty `/category/facialcare` etc. after partial imports.
+ */
+function mergeSeedForMongoCategoryGaps(mongoList: Product[]): Product[] {
+  const mongoNormalized = mongoList.map((p) => normalizeProduct(p));
+  const mongoSlugs = new Set(mongoNormalized.map((p) => p.slug.toLowerCase()));
+  const categoriesWithMongo = new Set(mongoNormalized.map((p) => p.category));
+
+  const extras = normalizedFallbackProducts().filter((p) => {
+    if (mongoSlugs.has(p.slug.toLowerCase())) return false;
+    if (categoriesWithMongo.has(p.category)) return false;
+    return true;
+  });
+
+  return [...mongoNormalized, ...extras];
+}
+
 let warnedServingSeedNoMongo = false;
 
 /**
  * Prefer Mongo catalogue; if it is empty and fallback is enabled, serve `data/products.js`.
+ * If Mongo has products and fallback is enabled, merge seed rows for categories Mongo does not
+ * cover yet (Mongo wins on slug collision).
  * Disable fallback in production-only Mongo mode with `SYNTRAA_CATALOG_FALLBACK=false`.
  */
 export async function getCatalogProducts(): Promise<Product[]> {
   try {
     const list = await listProducts();
     if (list.length > 0) {
-      return list.map((p) => normalizeProduct(p));
+      if (!catalogFallbackAllowed()) {
+        return list.map((p) => normalizeProduct(p));
+      }
+      return mergeSeedForMongoCategoryGaps(list);
     }
 
     const uriSet = Boolean(resolveMongoUri());
